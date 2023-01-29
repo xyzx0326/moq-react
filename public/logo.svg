@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="200px" height="200px" viewBox="0 0 200 200" version="1.1"
+     xmlns="http://www.w3.org/2000/svg">
+    <title>编组</title>
+    <defs>
+        <filter x="-4.0%" y="-4.0%" width="120.0%" height="120.0%" filterUnits="objectBoundingBox" id="filter">
+            <feOffset dx="3" dy="3" in="SourceAlpha" result="shadowOffsetOuter1"/>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.149456744 0" type="matrix"
+                           in="shadowOffsetOuter1"/>
+        </filter>
+        <circle id="path-1" cx="100" cy="100" r="13"/>
+        <circle id="path-3" cx="133.33" cy="133.33" r="13"/>
+        <circle id="path-5" cx="133.33" cy="100" r="13"/>
+
+        <circle id="path-4" cx="66.67" cy="66.67" r="13"/>
+        <circle id="path-2" cx="66.67" cy="133.33" r="13"/>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组">
+            <g id="矩形" fill="#eee1bb">
+                <rect x="0" y="0" width="200" height="200"/>
+            </g>
+            <g id="line-1">
+                <line id="矩形" x1="0" y1="33.33" x2="200" y2="33.33" stroke="#baa17e"/>
+                <line id="矩形" x1="0" y1="66.67" x2="200" y2="66.67" stroke="#baa17e"/>
+                <line id="矩形" x1="0" y1="100" x2="200" y2="100" stroke="#baa17e"/>
+                <line id="矩形" x1="0" y1="133.33" x2="200" y2="133.33" stroke="#baa17e"/>
+                <line id="矩形" x1="0" y1="166.67" x2="200" y2="166.67" stroke="#baa17e"/>
+            </g>
+            <g id="line-1">
+                <line id="矩形" y1="0" x1="33.33" y2="200" x2="33.33" stroke="#baa17e"/>
+                <line id="矩形" y1="0" x1="66.67" y2="200" x2="66.67" stroke="#baa17e"/>
+                <line id="矩形" y1="0" x1="100" y2="200" x2="100" stroke="#baa17e"/>
+                <line id="矩形" y1="0" x1="133.33" y2="200" x2="133.33" stroke="#baa17e"/>
+                <line id="矩形" y1="0" x1="166.67" y2="200" x2="166.67" stroke="#baa17e"/>
+            </g>
+            <g id="椭圆形">
+                <use fill="black" fill-opacity="1" filter="url(#filter)" xlink:href="#path-2"></use>
+                <use fill="#D8D8D8" fill-rule="evenodd" xlink:href="#path-2"></use>
+            </g>
+            <g id="椭圆形">
+                <use fill="black" fill-opacity="1" filter="url(#filter)" xlink:href="#path-4"></use>
+                <use fill="#D8D8D8" fill-rule="evenodd" xlink:href="#path-4"></use>
+            </g>
+            <g id="椭圆形">
+                <use fill="black" fill-opacity="1" filter="url(#filter)" xlink:href="#path-1"></use>
+                <use fill="#2B2B2B" fill-rule="evenodd" xlink:href="#path-1"></use>
+            </g>
+            <g id="椭圆形">
+                <use fill="black" fill-opacity="1" filter="url(#filter)" xlink:href="#path-3"></use>
+                <use fill="#2B2B2B" fill-rule="evenodd" xlink:href="#path-3"></use>
+            </g>
+            <g id="椭圆形">
+                <use fill="black" fill-opacity="1" filter="url(#filter)" xlink:href="#path-5"></use>
+                <use fill="#2B2B2B" fill-rule="evenodd" xlink:href="#path-5"></use>
+            </g>
+        </g>
+    </g>
+</svg>
