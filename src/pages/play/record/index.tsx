@@ -4,7 +4,7 @@ import {usePieces, useRemoteGo, useStore} from "@/hooks";
 import {GameFrameData} from "@/stores/game";
 import history from "@/stores/history";
 import {saveAs} from 'file-saver';
-import {useOnline} from "game-react";
+import {useOnline} from "@illuxiza/one-client-react";
 import moment from "moment";
 
 import React, {useEffect, useRef, useState} from 'react';

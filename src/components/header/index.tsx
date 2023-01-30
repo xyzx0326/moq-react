@@ -1,7 +1,7 @@
 import black from '@/assets/black.png'
 import white from '@/assets/white.png'
 import {blackJson} from "@/stores/game";
-import {Player} from 'game-react';
+import {Player} from '@illuxiza/one-client';
 
 import React from 'react';
 import {useCopyToClipboard} from "react-use";

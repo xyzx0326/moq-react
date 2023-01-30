@@ -1,5 +1,5 @@
 import {AnyAction} from "@reduxjs/toolkit";
-import {sendFrame} from "game-react";
+import {sendFrame} from "@illuxiza/one-client";
 
 import {useGo} from "./index";
 

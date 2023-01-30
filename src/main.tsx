@@ -2,7 +2,7 @@ import {Home, Play} from '@/pages';
 import {store} from "@/stores";
 import {blackJson, updateSelfColor, whiteJson} from "@/stores/game";
 
-import {configClient} from 'game-react'
+import {configClient} from '@illuxiza/one-client'
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';

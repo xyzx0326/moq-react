@@ -6,7 +6,8 @@ import modes from '@/config/modes'
 import {useGo, usePieces, useRemoteGo, useStore} from "@/hooks";
 import {changeSelfColor, GridData, handleRestart, handleSelectGrid, updateSelfColor} from "@/stores/game";
 import {redo, undo} from "@/stores/history";
-import {addRoom, configRoom, leaveRoom, resetRoom, useOnline} from 'game-react';
+import {addRoom, configRoom, leaveRoom, resetRoom} from '@illuxiza/one-client';
+import {useOnline} from "@illuxiza/one-client-react";
 import React, {useState} from 'react';
 import {useParams} from "react-router-dom";
 import {useMount, useUpdateEffect} from "react-use";
@@ -180,9 +181,11 @@ const Play = () => {
                             换手
                         </button> :
                     <>
-                        <button onClick={undoGame} disabled={game.gameIsEnd || (mode == "remote" && !online.isPlayer)}>悔棋
+                        <button onClick={undoGame}
+                                disabled={game.gameIsEnd || (mode == "remote" && !online.isPlayer)}>悔棋
                         </button>
-                        <button onClick={redoGame} disabled={game.gameIsEnd || (mode == "remote" && !online.isPlayer)}>重走
+                        <button onClick={redoGame}
+                                disabled={game.gameIsEnd || (mode == "remote" && !online.isPlayer)}>重走
                         </button>
                         <button onClick={() => setOpen(true)}>
                             记录
