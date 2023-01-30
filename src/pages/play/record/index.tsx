@@ -1,10 +1,10 @@
 import {Game, Modal} from "@/components";
 import {boardScale, boardSize} from "@/config/board";
-import {usePieces, useRemoteGo, useStore} from "@/hooks";
+import rules, {defaultRule} from "@/config/rules";
+import {usePieces, useStore} from "@/hooks";
 import {GameFrameData} from "@/stores/game";
 import history from "@/stores/history";
 import {saveAs} from 'file-saver';
-import {useOnline} from "@illuxiza/one-client-react";
 import moment from "moment";
 
 import React, {useEffect, useRef, useState} from 'react';
@@ -21,11 +21,9 @@ let st: number;
 const StepRecord: React.FC<RecordProps> = ({open, mode, onClose}) => {
     const game = useStore(state => state.game);
     const [stepIndex, setStepIndex] = useState(1);
-    const online = useOnline();
     const [gameInfo, setGameInfo] = useState<GameFrameData | undefined>(undefined);
     const pieces = usePieces(gameInfo?.board);
     const [record, setRecord] = useState(false);
-    const go = useRemoteGo(mode);
     const scale = 0.8;
 
     const ref = useRef<any>(null);
@@ -53,12 +51,12 @@ const StepRecord: React.FC<RecordProps> = ({open, mode, onClose}) => {
             setRecord(false);
         } else {
             setTimeout(() => {
-                if (st !=stepIndex) {
+                if (st != stepIndex) {
                     gif.addFrame(ref.current.toCanvas(), {delay: 500, copy: true});
                     st = stepIndex;
                 }
             }, 200);
-            setTimeout(()=> {
+            setTimeout(() => {
                 setStepIndex(stepIndex + 1)
             }, 500)
         }
@@ -83,6 +81,7 @@ const StepRecord: React.FC<RecordProps> = ({open, mode, onClose}) => {
         setRecord(true)
     }
 
+    const rule = gameInfo?.rule ?? defaultRule;
     return <Modal
         open={open}
         width={boardSize.board * scale + 40}
@@ -105,6 +104,7 @@ const StepRecord: React.FC<RecordProps> = ({open, mode, onClose}) => {
                 pieces={pieces}
                 steps={gameInfo?.steps}
                 useGrid={gameInfo?.useGrid}
+                freeCount={rules[rule].freeCount}
             />
             <div className="step-group" style={{marginTop: "1rem"}}>
                 <button onClick={() => setStepIndex(stepIndex - 1)} disabled={stepIndex === 1 || record}>

@@ -1,7 +1,7 @@
 import {Modal} from "@/components";
 import {boardSize} from "@/config/board";
 import rules, {RuleKey} from "@/config/rules";
-import {useGo, useStore} from "@/hooks";
+import {useRemoteGo, useStore} from "@/hooks";
 import {updateRule} from "@/stores/game";
 
 import React from 'react';
@@ -10,11 +10,12 @@ import './index.scss'
 
 type SettingProps = {
     open: boolean
+    mode?:string
     onClose: () => void
 }
 
-const RuleSetting: React.FC<SettingProps> = ({open, onClose}) => {
-    const go = useGo();
+const RuleSetting: React.FC<SettingProps> = ({open,mode, onClose}) => {
+    const go = useRemoteGo(mode);
     const game = useStore(state => state.game);
     const ruleList = (Object.keys(rules) as RuleKey[]).map((ruleKey) => {
         const rule = rules[ruleKey];
@@ -42,7 +43,7 @@ const RuleSetting: React.FC<SettingProps> = ({open, onClose}) => {
                     <div className="rule-item-check">
                         <input
                             type="radio"
-                            checked={game.rule==ruleItem.key}
+                            checked={game.rule == ruleItem.key}
                             disabled={game.steps > 0}
                             onChange={() => toggleRuleItem(ruleItem.key)}
                         />

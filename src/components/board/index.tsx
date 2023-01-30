@@ -6,7 +6,7 @@ import {GridData} from "@/stores/game";
 import Konva from "konva";
 import {LineCap, LineJoin} from "konva/lib/Shape";
 import React, {useEffect, useState} from 'react';
-import {Group, Layer, Line, Rect} from "react-konva";
+import {Group, Line, Rect} from "react-konva";
 
 type BoardProps = {
     boardSize: BoardSizeType;
@@ -14,16 +14,24 @@ type BoardProps = {
     selectGrid?: GridData;
     steps?: number;
     useGrid?: DirectionData[];
+    freeCount?: number;
 
     onGridSelect?: (data: GridData) => void;
 }
 
 
-const Board: React.FC<BoardProps> = ({boardSize, selfIsWhite, selectGrid, onGridSelect, steps = 0, useGrid}) => {
+const Board: React.FC<BoardProps> = ({
+                                         boardSize,
+                                         selfIsWhite,
+                                         selectGrid,
+                                         onGridSelect,
+                                         steps = 0,
+                                         freeCount,
+                                         useGrid
+                                     }) => {
     const [lines, setLines] = useState<Konva.LineConfig[]>([]);
     const [rects, setRects] = useState<Konva.RectConfig[]>([]);
     const {board, boardGrid, boardEdge} = boardSize;
-    console.log(useGrid)
     // 棋盘线格
     useEffect(() => {
         const ret = [];
@@ -86,7 +94,7 @@ const Board: React.FC<BoardProps> = ({boardSize, selfIsWhite, selectGrid, onGrid
     useEffect(() => {
         const ret = [];
         const tmp = [];
-        if (steps < 2 || !useGrid) {
+        if (!freeCount || steps < freeCount || !useGrid) {
             for (let i = 0; i < 19; i++) {
                 for (let j = 0; j < 19; j++) {
                     ret.push({
@@ -101,8 +109,8 @@ const Board: React.FC<BoardProps> = ({boardSize, selfIsWhite, selectGrid, onGrid
                 }
             }
         } else {
-            for (let i = 0; i < useGrid?.length; i++) {
-                const use = useGrid[i];
+            for (let i = 0; i < useGrid!.length; i++) {
+                const use = useGrid![i];
 
                 const rowIndex = use.rowIndex * 19;
                 const colIndex = use.colIndex;

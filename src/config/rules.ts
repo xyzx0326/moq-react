@@ -65,14 +65,22 @@ export const rules = {
     // },
     "0.2": {
         title: "墨棋0.2",
+        freeCount:2,
         useGrid: getUseGrid((board: number[], index: number) => {
             return board[index] < 0 ? 1 : 2;
         })
     },
-    "0.3": {
-        title: "墨棋0.3",
-        useGrid: getUseGrid(() => {
-            return 1;
+    // "0.3": {
+    //     title: "墨棋0.3",
+    //     useGrid: getUseGrid(() => {
+    //         return 1;
+    //     })
+    // }
+    "0.4": {
+        title: "墨棋0.4",
+        freeCount:3,
+        useGrid: getUseGrid((board: number[], index: number) => {
+            return board[index] < 0 ? 1 : 2;
         })
     }
 };

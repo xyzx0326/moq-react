@@ -1,4 +1,4 @@
-import {defaultRule, DirectionData, Rule, rules} from "@/config/rules";
+import {defaultRule, DirectionData, Rule, RuleKey, rules} from "@/config/rules";
 import {CACHE_RULE_KEY, CacheUtils, GameUtils} from "@/utils";
 import {createSlice} from '@reduxjs/toolkit'
 
@@ -20,7 +20,7 @@ export type GameFrameData = {
     gameIsEnd?: boolean;// 游戏是否结束
     selectGrid: GridData | undefined,
     useGrid: DirectionData[],
-    rule: Rule
+    rule: RuleKey
 };
 
 const cacheRule = CacheUtils.getItem(CACHE_RULE_KEY, defaultRule);

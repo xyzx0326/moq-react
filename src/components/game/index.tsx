@@ -14,6 +14,7 @@ type GameProps = {
     boardSize: BoardSizeType; // 棋盘规格
     steps: number | undefined;
     useGrid: DirectionData[] | undefined;
+    freeCount?: number;
 
     onGridSelect?: (data: GridData) => void;
 }
@@ -22,7 +23,7 @@ const Game: React.FC<GameProps> = forwardRef((props, ref: any) => {
     const {
         pieces, selectGrid, selfIsWhite,
         gameIsEnd, boardSize, onGridSelect,
-        steps, useGrid
+        steps, useGrid, freeCount
     } = props
     const {board, boardGrid, boardEdge, pieceRadius} = boardSize
 
@@ -30,7 +31,7 @@ const Game: React.FC<GameProps> = forwardRef((props, ref: any) => {
         <Stage width={board} height={board}>
             <Layer ref={ref}>
                 <Board boardSize={boardSize} selectGrid={selectGrid} selfIsWhite={selfIsWhite}
-                       onGridSelect={onGridSelect} steps={steps} useGrid={useGrid}/>
+                       onGridSelect={onGridSelect} steps={steps} useGrid={useGrid} freeCount={freeCount}/>
                 <Group x={boardEdge} y={boardEdge}>
                     {pieces.map(piece => {
                         return <Piece key={piece.num}

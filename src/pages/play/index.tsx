@@ -3,8 +3,16 @@ import white from '@/assets/white.png';
 import {Footer, Game, Header, Nav} from '@/components'
 import {boardSize} from "@/config/board";
 import modes from '@/config/modes'
+import rules from "@/config/rules";
 import {useGo, usePieces, useRemoteGo, useStore} from "@/hooks";
-import {changeSelfColor, GridData, handleRestart, handleSelectGrid, updateSelfColor} from "@/stores/game";
+import {
+    changeSelfColor,
+    GameFrameData,
+    GridData,
+    handleRestart,
+    handleSelectGrid,
+    updateSelfColor
+} from "@/stores/game";
 import {redo, undo} from "@/stores/history";
 import {addRoom, configRoom, leaveRoom, resetRoom} from '@illuxiza/one-client';
 import {useOnline} from "@illuxiza/one-client-react";
@@ -19,7 +27,7 @@ import RuleSetting from "./setting";
 
 
 const Play = () => {
-    const game = useStore(state => state.game);
+    const game:GameFrameData = useStore(state => state.game);
     const [pause, setPause] = useState(false);
     const online = useOnline();
     const pieces = usePieces(game.board);
@@ -138,7 +146,7 @@ const Play = () => {
     return (
         <div className="main" style={{width: `${boardSize.board}px`}}>
             <Nav title={cfg.title} onBack={onBack}
-                // onSetting={() => setShowRule(true)}
+                onSetting={() => setShowRule(true)}
             />
             <Header mode={mode} selfIsWhite={game.selfIsWhite} otherSideOnline={online.playerCount === 2}
                     channelId={params.roomId ? params.roomId!.substring(0, 4) : ''} isViewer={!online.isPlayer}
@@ -170,6 +178,7 @@ const Play = () => {
                         onGridSelect={handleGrid}
                         steps={game.steps}
                         useGrid={game.useGrid}
+                        freeCount={rules[game.rule].freeCount}
                     />
                 </div>
             </div>
@@ -197,7 +206,7 @@ const Play = () => {
                 <div>{endBecause}</div>
             </div>
             <StepRecord open={open} mode={mode} onClose={() => setOpen(false)}/>
-            <RuleSetting open={showRule} onClose={() => setShowRule(false)}/>
+            <RuleSetting open={showRule} mode={mode} onClose={() => setShowRule(false)}/>
         </div>
     );
 }

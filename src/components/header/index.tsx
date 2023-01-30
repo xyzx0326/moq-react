@@ -10,7 +10,7 @@ import './index.scss'
 
 type HeaderProps = {
     mode: string,
-    selfIsWhite: boolean,
+    selfIsWhite?: boolean,
     otherSideOnline: boolean,
     channelId?: string,
     isViewer?: boolean,

@@ -7,7 +7,7 @@ import './index.scss'
 
 export type FooterProps = {
     mode: string,
-    selfIsWhite: boolean,
+    selfIsWhite?: boolean,
     isViewer: boolean,
     displayName?: string,
 } & PropsWithChildren
