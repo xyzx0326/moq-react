@@ -95,6 +95,9 @@ const StepRecord: React.FC<RecordProps> = ({open, mode, onClose}) => {
         }}
     >
         <div className="step-boards">
+            <div className="step-group" style={{marginBottom: "1rem"}}>
+                <span style={{width: '100%'}}>{stepIndex}/{game.steps}</span>
+            </div>
             <Game
                 // @ts-ignore
                 ref={ref}
@@ -103,15 +106,12 @@ const StepRecord: React.FC<RecordProps> = ({open, mode, onClose}) => {
                 steps={gameInfo?.steps}
                 useGrid={gameInfo?.useGrid}
             />
-            <div className="step-group">
-                <span>{stepIndex}/{game.steps}</span>
-            </div>
-            <div className="step-group">
+            <div className="step-group" style={{marginTop: "1rem"}}>
                 <button onClick={() => setStepIndex(stepIndex - 1)} disabled={stepIndex === 1 || record}>
                     上一步
                 </button>
                 <button style={{margin: "0 10px"}} onClick={gotoStep} disabled={record}>
-                    保存棋局图像
+                    下载棋局
                 </button>
                 <button onClick={onClick} disabled={stepIndex === game.steps || record}>
                     下一步

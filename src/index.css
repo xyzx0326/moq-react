@@ -1,12 +1,16 @@
 :root {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
     font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-    font-size: 16px;
-    line-height: 24px;
+    font-size: 1rem;
+    line-height: 1.5rem;
     font-weight: 400;
 
-    color-scheme: light dark;
-    color: rgba(255, 255, 255, 0.87);
-    background-color: #222;
+    color: #fff;
+    background: linear-gradient(#00c5d2, #aaf5b8);
 }
 
 * {
@@ -28,19 +32,19 @@ body {
 }
 
 button {
-    border-radius: 6px;
-    padding: 0.5em 1.2em;
-    font-size: 1em;
+    border-radius: 0.2rem;
+    padding: 0.5rem 0.5rem;
+    font-size: 1rem;
     font-weight: 500;
     font-family: inherit;
-    height: 2em;
-    line-height: 1em;
-    border: 1px solid #ddd60b;
-    color: #ddd60b;
-    background-color: #3e3e3e;
-    /*border: none;*/
+    height: 2rem;
+    line-height: 1rem;
+    color: #00c5d2;
+    background-color: #fff;
+    border: none;
     cursor: pointer;
     user-select: none;
+    width: 100%;
 }
 
 button:disabled {

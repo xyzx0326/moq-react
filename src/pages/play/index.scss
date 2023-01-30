@@ -1,16 +1,16 @@
 .main {
-    margin: 0 auto;
     display: flex;
     flex-direction: column;
+    height: 100vh;
 
     .color-piece {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 0.5rem;
 
         .piece-img {
-            width: 24px;
-            height: 24px;
+            width: 1.2rem;
+            height: 1.2rem;
         }
     }
 
@@ -18,12 +18,13 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-top: 8px;
+        margin-top: 0.5rem;
 
         .channel {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 8px;
+            gap: 0.5rem;
         }
     }
 
@@ -32,7 +33,7 @@
         flex-direction: column;
 
         .board-header {
-            margin-top: 8px;
+            margin-top: 0.5rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -40,13 +41,13 @@
             .step {
                 display: flex;
                 align-items: center;
-                gap: 8px;
+                gap: 0.5rem;
             }
         }
 
         .board-body {
-            margin-top: 10px;
-            border-radius: 10px;
+            margin-top: 0.5rem;
+            border-radius: 0.5rem;
             border: 1px #d0c6b0 solid;
             overflow: hidden;
             transform: translateZ(0);
@@ -55,7 +56,7 @@
     }
 
     .board-footer {
-        margin-top: 8px;
-        height: 2em;
+        margin-top: 0.5rem;
+        height: 2rem;
     }
 }

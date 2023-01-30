@@ -1,6 +1,6 @@
 import {Home, Play} from '@/pages';
 import {store} from "@/stores";
-import {blackJson, updateSelfColor, whiteJson} from "@/stores/game";
+import {blackJson, whiteJson} from "@/stores/game";
 
 import {configClient} from '@illuxiza/one-client'
 
@@ -11,9 +11,9 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 
 import './index.css';
 
-const url = "10.21.124.52:8888";
-// const url = "game.congeer.com";
-configClient("ws://" + url + "/game/ws", {
+// const url = "10.21.124.52:8888";
+const url = "game.congeer.com";
+configClient("ws://" + url + "/game-tmp/ws", {
     maxPlayer: 2,
     baseConfig: [],
     debug: false,

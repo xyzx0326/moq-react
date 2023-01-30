@@ -1,12 +1,13 @@
 .footer {
-    margin-top: 8px;
+    margin-top: 0.5rem;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 0.5rem;
+
     .btns {
         margin-left: auto;
         display: flex;
-        gap: 8px;
+        gap: 0.5rem;
         align-items: center;
     }
 }

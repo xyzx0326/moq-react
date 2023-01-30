@@ -16,8 +16,7 @@ const htmlPlugin = () => {
             while ((match = patternLink.exec(html)) != null) {
                 script.push(match[0])
             }
-            let scriptStr = `<script src="/moq/assets/gif.js"></script>
-    <script src="/moq/assets/gif.worker.js"></script>`
+            let scriptStr = `<script src="/moq/assets/gif.js"></script>`
             return html.replace(`<!-- script import -->`, scriptStr)
         }
     }

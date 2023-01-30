@@ -33,7 +33,7 @@ const Header: React.FC<HeaderProps> = ({mode, selfIsWhite, otherSideOnline, chan
     return mode !== 'local' ?
         <div className="header">
             {isViewer ? <div className="color-piece">
-                    {players?.map((player,index) => {
+                    {players?.map((player, index) => {
                         return <div className="color-piece" key={index}>{player.configList?.length ?
                             <img className="piece-img" src={(player.configList![0] == blackJson) ? black : white}
                                  alt=""/> : <></>}
@@ -46,7 +46,7 @@ const Header: React.FC<HeaderProps> = ({mode, selfIsWhite, otherSideOnline, chan
                 </div>}
             {mode === "remote" && !otherSideOnline ?
                 <div className="channel">
-                    <span>房间：{channelId}</span>
+                    <span>房间:{channelId}</span>
                     <button onClick={copyLink}>邀请
                     </button>
                 </div> : <></>

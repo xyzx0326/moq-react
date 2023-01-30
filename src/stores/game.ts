@@ -69,49 +69,6 @@ export const gameSlice = createSlice({
             const rowIndex = payload.rowIndex;
             const index = rowIndex * 19 + colIndex;
 
-            // let flag = false;
-            // if (state.steps > 2) {
-            //     for (let i = 0; i < state.useGrid.length; i++) {
-            //         const use = state.useGrid[i];
-            //
-            //         const rowIndex = use.rowIndex * 19;
-            //         const colIndex = use.colIndex;
-            //         const current = colIndex + rowIndex;
-            //
-            //         const direction = [
-            //             {
-            //                 condition: (i: number) => colIndex - i >= 0,
-            //                 boardIndex: (i: number) => current - i
-            //             },
-            //             {
-            //                 condition: (i: number) => rowIndex - i >= 0,
-            //                 boardIndex: (i: number) => current - i * 19
-            //             },
-            //             {
-            //                 condition: (i: number) => colIndex - i >= 0 && rowIndex - i >= 0,
-            //                 boardIndex: (i: number) => current - i * 20
-            //             },
-            //             {
-            //                 condition: (i: number) => colIndex + i < 19 && rowIndex + i >= 0,
-            //                 boardIndex: (i: number) => current - i * 18
-            //             },
-            //         ]
-            //         const d = direction[use.direction];
-            //         let j = 0;
-            //         while (d.condition(j)) {
-            //             if (index == d.boardIndex(j)) {
-            //                 flag = true;
-            //                 break;
-            //             }
-            //             j++;
-            //         }
-            //         if (flag) {
-            //             break;
-            //         }
-            //     }
-            // } else {
-            //     flag = true;
-            // }
             // 如果此格没有棋子，则可以选择
             if (!state.board[index]) {
                 if (state.selectGrid && state.selectGrid.rowIndex === payload.rowIndex && state.selectGrid.colIndex === payload.colIndex) {
