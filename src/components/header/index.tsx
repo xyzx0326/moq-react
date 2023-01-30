@@ -28,19 +28,21 @@ const Header: React.FC<HeaderProps> = ({mode, selfIsWhite, otherSideOnline, chan
             alert("邀请链接已复制，可以粘贴发给好友或直接分享本页面给好友")
         }
     };
-
+    let otherId = "";
+    players?.filter(v => v.id !== selfId).forEach(v => otherId = v.id)
     return mode !== 'local' ?
         <div className="header">
             {isViewer ? <div className="color-piece">
-                    {players?.map(player => {
-                        return <><img className="piece-img" src={(player.configList![0] == blackJson) ? black : white}
-                                      alt=""/>
-                            <span>{player.id}</span></>
+                    {players?.map((player,index) => {
+                        return <div className="color-piece" key={index}>{player.configList?.length ?
+                            <img className="piece-img" src={(player.configList![0] == blackJson) ? black : white}
+                                 alt=""/> : <></>}
+                            <span>{player.id?.substring(0, 5)}</span></div>
                     })}
                 </div>
                 : <div className="color-piece">
                     <img className="piece-img" src={!selfIsWhite ? white : black} alt=""/>
-                    <span>对方{mode === "remote" ? otherSideOnline ? '在线' : '离线或无人' : ''}</span>
+                    <span>对方{mode === "remote" ? otherSideOnline ? otherId ? otherId.substring(0, 5) : '在线' : '离线或无人' : ''}</span>
                 </div>}
             {mode === "remote" && !otherSideOnline ?
                 <div className="channel">

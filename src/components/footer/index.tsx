@@ -22,7 +22,7 @@ const Footer: React.FC<FooterProps> = ({mode, selfIsWhite, isViewer, children, d
                              src={selfIsWhite ? white : black}
                              alt=""
                         />
-                        <span>己方执{selfIsWhite ? '白' : '黑'} {displayName?displayName:''}</span></>
+                        <span>己方执{selfIsWhite ? '白' : '黑'} {displayName ? displayName.substring(0, 5) : ''}</span></>
                     }
                 </div> : <></>
             }

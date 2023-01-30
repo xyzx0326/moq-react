@@ -11,12 +11,12 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 
 import './index.css';
 
-// const url = "10.21.124.52:8888";
-const url = "game.congeer.com";
-configClient("ws://" + url + "/game-tmp/ws", {
+const url = "10.21.124.52:8888";
+// const url = "game.congeer.com";
+configClient("ws://" + url + "/game/ws", {
     maxPlayer: 2,
     baseConfig: [],
-    debug: true,
+    debug: false,
     playerConfig: [[blackJson], [whiteJson]],
     onConfig: store.dispatch,
     onFrame: store.dispatch

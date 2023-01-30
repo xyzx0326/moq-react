@@ -5,7 +5,7 @@ import {defineConfig} from 'vite'
 const htmlPlugin = () => {
     return {
         name: 'html-transform',
-        transformIndexHtml(html:any) {
+        transformIndexHtml(html: any) {
             let match;
             const patternScript = /<script type="module" crossorigin src=.*?><\/script>/g
             const patternLink = /<link .*?>/g
@@ -16,13 +16,9 @@ const htmlPlugin = () => {
             while ((match = patternLink.exec(html)) != null) {
                 script.push(match[0])
             }
-            let scriptStr = `<script src="../assets/gif.js"></script>
-    <script src="../assets/gif.worker.js"></script>`
-            if (process.env.NODE_ENV !== 'production') {
-                return html.replace(`<title>墨棋</title>`, scriptStr)
-            } else {
-                return html.replace(`<!-- script import -->`, scriptStr)
-            }
+            let scriptStr = `<script src="/moq/assets/gif.js"></script>
+    <script src="/moq/assets/gif.worker.js"></script>`
+            return html.replace(`<!-- script import -->`, scriptStr)
         }
     }
 }
