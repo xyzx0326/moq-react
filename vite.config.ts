@@ -2,11 +2,35 @@ import react from '@vitejs/plugin-react'
 import path from 'path'
 import {defineConfig} from 'vite'
 
+const htmlPlugin = () => {
+    return {
+        name: 'html-transform',
+        transformIndexHtml(html:any) {
+            let match;
+            const patternScript = /<script type="module" crossorigin src=.*?><\/script>/g
+            const patternLink = /<link .*?>/g
+            const script = [];
+            while ((match = patternScript.exec(html)) != null) {
+                script.push(match[0])
+            }
+            while ((match = patternLink.exec(html)) != null) {
+                script.push(match[0])
+            }
+            let scriptStr = `<script src="../assets/gif.js"></script>
+    <script src="../assets/gif.worker.js"></script>`
+            if (process.env.NODE_ENV !== 'production') {
+                return html.replace(`<title>墨棋</title>`, scriptStr)
+            } else {
+                return html.replace(`<!-- script import -->`, scriptStr)
+            }
+        }
+    }
+}
 // https://vitejs.dev/config/
 export default defineConfig(() => {
     return {
         base: '/moq/',
-        plugins: [react()],
+        plugins: [react(), htmlPlugin()],
         resolve: {
             alias: {
                 tslib: 'tslib',

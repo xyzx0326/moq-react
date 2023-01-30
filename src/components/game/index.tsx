@@ -3,8 +3,8 @@ import {BoardSizeType} from "@/config/board";
 import {DirectionData} from "@/config/rules";
 import {GridData, PieceType} from "@/stores/game";
 
-import React from 'react';
-import {Layer, Stage} from "react-konva";
+import React, {forwardRef} from 'react';
+import {Group, Layer, Stage} from "react-konva";
 
 type GameProps = {
     pieces: PieceType[]; // 棋子数据
@@ -18,31 +18,35 @@ type GameProps = {
     onGridSelect?: (data: GridData) => void;
 }
 
-const Game: React.FC<GameProps> = ({
-                                       pieces, selectGrid, selfIsWhite,
-                                       gameIsEnd, boardSize, onGridSelect,
-                                       steps, useGrid
-                                   }) => {
+const Game: React.FC<GameProps> = forwardRef((props, ref: any) => {
+    const {
+        pieces, selectGrid, selfIsWhite,
+        gameIsEnd, boardSize, onGridSelect,
+        steps, useGrid
+    } = props
     const {board, boardGrid, boardEdge, pieceRadius} = boardSize
 
     return (
         <Stage width={board} height={board}>
-            <Board boardSize={boardSize} selectGrid={selectGrid} selfIsWhite={selfIsWhite} onGridSelect={onGridSelect} steps={steps} useGrid={useGrid}/>
-            <Layer x={boardEdge} y={boardEdge}>
-                {pieces.map(piece => {
-                    return <Piece key={piece.num}
-                                  num={piece.num}
-                                  rowIndex={piece.rowIndex}
-                                  colIndex={piece.colIndex}
-                                  boardGrid={boardGrid}
-                                  radius={pieceRadius}
-                                  isEnd={gameIsEnd}
-                                  isLast={piece.isLast}
-                    />;
-                })}
+            <Layer ref={ref}>
+                <Board boardSize={boardSize} selectGrid={selectGrid} selfIsWhite={selfIsWhite}
+                       onGridSelect={onGridSelect} steps={steps} useGrid={useGrid}/>
+                <Group x={boardEdge} y={boardEdge}>
+                    {pieces.map(piece => {
+                        return <Piece key={piece.num}
+                                      num={piece.num}
+                                      rowIndex={piece.rowIndex}
+                                      colIndex={piece.colIndex}
+                                      boardGrid={boardGrid}
+                                      radius={pieceRadius}
+                                      isEnd={gameIsEnd}
+                                      isLast={piece.isLast}
+                        />;
+                    })}
+                </Group>
             </Layer>
         </Stage>
     );
-}
+})
 
 export default Game;

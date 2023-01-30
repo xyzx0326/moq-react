@@ -155,7 +155,7 @@ const Board: React.FC<BoardProps> = ({boardSize, selfIsWhite, selectGrid, onGrid
     }
 
     return (
-        <Layer>
+        <Group>
             <Rect
                 width={board}
                 height={board}
@@ -193,7 +193,7 @@ const Board: React.FC<BoardProps> = ({boardSize, selfIsWhite, selectGrid, onGrid
                     />
                 )}
             </Group>
-        </Layer>
+        </Group>
     );
 }
 
