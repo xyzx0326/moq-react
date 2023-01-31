@@ -1,7 +1,7 @@
 {
   "name": "moq",
   "version": "0.1.0",
-  "homepage": "moq",
+  "homepage": "moqt",
   "private": true,
   "dependencies": {
     "@illuxiza/one-client": "^0.0.2",

@@ -20,14 +20,14 @@ configClient("ws://" + url + "/game-tmp/ws", {
     playerConfig: [[blackJson], [whiteJson]],
     onConfig: store.dispatch,
     onFrame: store.dispatch
-}, "moq")
+}, "moqt")
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
 
 root.render(<Provider store={store}>
-        <BrowserRouter basename="/moq">
+        <BrowserRouter basename="/moqt">
             <Routes>
                 <Route path="/" element={<Home/>}/>
                 <Route path="/play/:mode" element={<Play/>}/>

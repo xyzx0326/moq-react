@@ -45,6 +45,7 @@ function getUseGrid(getWeight: Function) {
                     }
                     k++;
                 }
+                sum = Math.round(sum);
                 if ((sum % 2 == 1 && !selfIsWhite) || (sum % 2 == 0 && selfIsWhite)) {
                     const colIndex = index % 19;
                     const rowIndex = Math.floor(index / 19);
@@ -68,6 +69,13 @@ export const rules = {
         freeCount:2,
         useGrid: getUseGrid((board: number[], index: number) => {
             return board[index] < 0 ? 1 : 2;
+        })
+    },
+    "0.25": {
+        title: "墨棋0.25",
+        freeCount:2,
+        useGrid: getUseGrid((board: number[], index: number) => {
+            return board[index] < 0 ? 1 : 1.5;
         })
     },
     // "0.3": {

@@ -24,7 +24,7 @@ const htmlPlugin = () => {
 // https://vitejs.dev/config/
 export default defineConfig(() => {
     return {
-        base: '/moq/',
+        base: '/moqt/',
         plugins: [react(), htmlPlugin()],
         resolve: {
             alias: {
