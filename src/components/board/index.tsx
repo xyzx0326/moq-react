@@ -15,6 +15,7 @@ type BoardProps = {
     useGrid?: DirectionData[];
     boardInfo?: number[];
     freeCount?: number;
+    isEnd?: boolean;
 
     onGridSelect?: (data: GridData) => void;
 }
@@ -27,7 +28,8 @@ const Board: React.FC<BoardProps> = ({
                                          steps = 1,
                                          boardInfo,
                                          freeCount,
-                                         useGrid
+                                         useGrid,
+                                         isEnd
                                      }) => {
     const [lines, setLines] = useState<Konva.LineConfig[]>([]);
     const [texts, setTexts] = useState<Konva.TextConfig[]>([]);
@@ -136,71 +138,73 @@ const Board: React.FC<BoardProps> = ({
     useEffect(() => {
         const ret = [];
         const tmp = [];
-        if (!freeCount || steps < freeCount || !useGrid) {
-            for (let i = 0; i < 19; i++) {
-                for (let j = 0; j < 19; j++) {
-                    ret.push({
-                        row: j,
-                        col: i,
-                        x: boardGrid * i,
-                        y: boardGrid * j,
-                        width: boardGrid,
-                        height: boardGrid,
-                    });
-                }
-            }
-        } else {
-            for (let i = 0; i < useGrid!.length; i++) {
-                const use = useGrid![i];
-
-                const rowIndex = use.rowIndex;
-                const colIndex = use.colIndex;
-                const current = colIndex + rowIndex * 19;
-                const direction = [
-                    {
-                        condition: (v: number) => colIndex - v >= 0,
-                        boardIndex: (v: number) => current - v
-                    },
-                    {
-                        condition: (v: number) => rowIndex - v >= 0,
-                        boardIndex: (v: number) => current - v * 19
-                    },
-                    {
-                        condition: (v: number) => colIndex - v >= 0 && rowIndex - v >= 0,
-                        boardIndex: (v: number) => current - v * 20
-                    },
-                    {
-                        condition: (v: number) => colIndex + v < 19 && rowIndex - v >= 0,
-                        boardIndex: (v: number) => current - v * 18
-                    },
-                ]
-                const d = direction[use.direction];
-                let j = 0;
-                while (d.condition(j)) {
-                    const index = d.boardIndex(j);
-                    if (!boardInfo || !boardInfo[index]) {
-                        const r = Math.floor(index / 19);
-                        const c = index % 19;
-                        if (!tmp[index]) {
-                            tmp[index] = true;
-                            ret.push({
-                                row: r,
-                                col: c,
-                                x: boardGrid * c,
-                                y: boardGrid * r,
-                                width: boardGrid,
-                                height: boardGrid,
-                                fill: stepIsWhite ? "green" : "red",
-                                // fill: "green"
-                            });
-                        }
+        if (!isEnd) {
+            if (!freeCount || steps < freeCount || !useGrid) {
+                for (let i = 0; i < 19; i++) {
+                    for (let j = 0; j < 19; j++) {
+                        ret.push({
+                            row: j,
+                            col: i,
+                            x: boardGrid * i,
+                            y: boardGrid * j,
+                            width: boardGrid,
+                            height: boardGrid,
+                        });
                     }
-                    j++;
+                }
+            } else {
+                for (let i = 0; i < useGrid!.length; i++) {
+                    const use = useGrid![i];
+
+                    const rowIndex = use.rowIndex;
+                    const colIndex = use.colIndex;
+                    const current = colIndex + rowIndex * 19;
+                    const direction = [
+                        {
+                            condition: (v: number) => colIndex - v >= 0,
+                            boardIndex: (v: number) => current - v
+                        },
+                        {
+                            condition: (v: number) => rowIndex - v >= 0,
+                            boardIndex: (v: number) => current - v * 19
+                        },
+                        {
+                            condition: (v: number) => colIndex - v >= 0 && rowIndex - v >= 0,
+                            boardIndex: (v: number) => current - v * 20
+                        },
+                        {
+                            condition: (v: number) => colIndex + v < 19 && rowIndex - v >= 0,
+                            boardIndex: (v: number) => current - v * 18
+                        },
+                    ]
+                    const d = direction[use.direction];
+                    let j = 0;
+                    while (d.condition(j)) {
+                        const index = d.boardIndex(j);
+                        if (!boardInfo || !boardInfo[index]) {
+                            const r = Math.floor(index / 19);
+                            const c = index % 19;
+                            if (!tmp[index]) {
+                                tmp[index] = true;
+                                ret.push({
+                                    row: r,
+                                    col: c,
+                                    x: boardGrid * c,
+                                    y: boardGrid * r,
+                                    width: boardGrid,
+                                    height: boardGrid,
+                                    fill: stepIsWhite ? "green" : "red",
+                                    // fill: "green"
+                                });
+                            }
+                        }
+                        j++;
+                    }
                 }
             }
         }
         setRects(ret)
-    }, [boardGrid, steps, useGrid])
+    }, [boardGrid, steps, useGrid, isEnd])
 
     const onClick = (data: GridData) => {
         onGridSelect && onGridSelect(data)

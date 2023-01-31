@@ -26,7 +26,7 @@ const Game: React.FC<GameProps> = forwardRef((props, ref: any) => {
     return (
         <Stage width={board} height={board}>
             <Layer ref={ref}>
-                <Board boardSize={boardSize} selectGrid={selectGrid}
+                <Board boardSize={boardSize} selectGrid={selectGrid} isEnd={gameIsEnd}
                        onGridSelect={onGridSelect} steps={steps} useGrid={useGrid} freeCount={freeCount}
                        boardInfo={boardInfo}/>
                 <Group x={boardEdge} y={boardEdge}>
