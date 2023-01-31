@@ -3,7 +3,7 @@ import white from '@/assets/white.png';
 
 import Konva from "konva";
 import React, {useRef} from 'react';
-import {Group, Image as KImage, Line, Text} from "react-konva";
+import {Group, Image as KImage, Line, Rect, Text} from "react-konva";
 
 type NavProps = {
     num: number; // 当前棋子
@@ -32,6 +32,7 @@ const Piece: React.FC<NavProps> = ({
     const image = new Image();
     image.src = num > 0 ? white : black;
     const color = num > 0 ? '#000' : '#fff'
+    const fill = num < 0 ? '#000' : '#fff'
 
     const shadow = {
         shadowColor: "#000",

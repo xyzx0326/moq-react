@@ -1,3 +1,4 @@
+@import "../../variable";
 .modal {
     position: fixed;
     left: 50%;
@@ -21,8 +22,8 @@
         cursor: pointer;
         width: 1.6rem;
         height: 1.6rem;
-        color: #fff;
-        background: #00c5d2;
+        color: $globe-font-color;
+        background: $globe-color-1;
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -33,8 +34,8 @@
         position: relative;
         width: 100%;
         height: 100%;
-        color: #fff;
-        background: linear-gradient(#00c5d2, #aaf5b8);
+        color: $globe-font-color;
+        background: $globe-background;
         border-radius: 0.8rem;
         padding: 0.8rem;
         overflow: auto;

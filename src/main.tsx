@@ -9,7 +9,7 @@ import ReactDOM from 'react-dom/client';
 import {Provider} from "react-redux";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 
-import './index.css';
+import './index.scss';
 
 // const url = "10.21.124.52:8888";
 const url = "game.congeer.com";

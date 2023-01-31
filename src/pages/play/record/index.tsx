@@ -42,26 +42,28 @@ const StepRecord: React.FC<RecordProps> = ({open, mode, onClose}) => {
 
     if (record && gif) {
         if (stepIndex == game.steps) {
-            setTimeout(() => setGameInfo(game), 500)
+            setTimeout(() => {
+                setGameInfo(game)
+                setRecord(false);
+            }, 300)
             setTimeout(() => {
                 gif.addFrame(ref.current.toCanvas(), {delay: 1500, copy: true});
                 gif.render();
                 gif = null;
-            }, 700);
-            setRecord(false);
+            }, 400);
         } else {
             setTimeout(() => {
-                if (st != stepIndex) {
-                    gif.addFrame(ref.current.toCanvas(), {delay: 500, copy: true});
-                    st = stepIndex;
-                }
-            }, 200);
-            setTimeout(() => {
                 setStepIndex(stepIndex + 1)
-            }, 500)
+            }, 200)
         }
+        setTimeout(() => {
+            if (st != stepIndex) {
+                gif.addFrame(ref.current.toCanvas(), {delay: 500, copy: true});
+                st = stepIndex;
+            }
+        }, 100);
     }
-    const gotoStep = () => {
+    const downloadGif = () => {
         if (record) {
             return
         }
@@ -99,18 +101,17 @@ const StepRecord: React.FC<RecordProps> = ({open, mode, onClose}) => {
             </div>
             <Game
                 // @ts-ignore
+                gameInfo={gameInfo ? {...gameInfo, selectGrid: undefined} : {}}
                 ref={ref}
                 boardSize={boardScale(scale)}
                 pieces={pieces}
-                steps={gameInfo?.steps}
-                useGrid={gameInfo?.useGrid}
                 freeCount={rules[rule].freeCount}
             />
             <div className="step-group" style={{marginTop: "1rem"}}>
                 <button onClick={() => setStepIndex(stepIndex - 1)} disabled={stepIndex === 1 || record}>
                     上一步
                 </button>
-                <button style={{margin: "0 10px"}} onClick={gotoStep} disabled={record}>
+                <button style={{margin: "0 10px"}} onClick={downloadGif} disabled={record}>
                     下载棋局
                 </button>
                 <button onClick={onClick} disabled={stepIndex === game.steps || record}>

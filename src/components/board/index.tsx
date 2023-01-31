@@ -10,10 +10,10 @@ import {Group, Line, Rect} from "react-konva";
 
 type BoardProps = {
     boardSize: BoardSizeType;
-    selfIsWhite?: boolean;
     selectGrid?: GridData;
     steps?: number;
     useGrid?: DirectionData[];
+    boardInfo?: number[];
     freeCount?: number;
 
     onGridSelect?: (data: GridData) => void;
@@ -22,16 +22,17 @@ type BoardProps = {
 
 const Board: React.FC<BoardProps> = ({
                                          boardSize,
-                                         selfIsWhite,
                                          selectGrid,
                                          onGridSelect,
-                                         steps = 0,
+                                         steps = 1,
+                                         boardInfo,
                                          freeCount,
                                          useGrid
                                      }) => {
     const [lines, setLines] = useState<Konva.LineConfig[]>([]);
     const [rects, setRects] = useState<Konva.RectConfig[]>([]);
     const {board, boardGrid, boardEdge} = boardSize;
+    const stepIsWhite = steps % 2 == 1;
     // 棋盘线格
     useEffect(() => {
         const ret = [];
@@ -104,7 +105,6 @@ const Board: React.FC<BoardProps> = ({
                         y: boardGrid * j,
                         width: boardGrid,
                         height: boardGrid,
-                        // fill: 'yellow',
                     });
                 }
             }
@@ -112,49 +112,52 @@ const Board: React.FC<BoardProps> = ({
             for (let i = 0; i < useGrid!.length; i++) {
                 const use = useGrid![i];
 
-                const rowIndex = use.rowIndex * 19;
+                const rowIndex = use.rowIndex;
                 const colIndex = use.colIndex;
-                const current = colIndex + rowIndex;
+                const current = colIndex + rowIndex*19;
                 const direction = [
                     {
-                        condition: (i: number) => colIndex - i >= 0,
-                        boardIndex: (i: number) => current - i
+                        condition: (v: number) => colIndex - v >= 0,
+                        boardIndex: (v: number) => current - v
                     },
                     {
-                        condition: (i: number) => rowIndex - i >= 0,
-                        boardIndex: (i: number) => current - i * 19
+                        condition: (v: number) => rowIndex - v >= 0,
+                        boardIndex: (v: number) => current - v * 19
                     },
                     {
-                        condition: (i: number) => colIndex - i >= 0 && rowIndex - i >= 0,
-                        boardIndex: (i: number) => current - i * 20
+                        condition: (v: number) => colIndex - v >= 0 && rowIndex - v >= 0,
+                        boardIndex: (v: number) => current - v * 20
                     },
                     {
-                        condition: (i: number) => colIndex + i < 19 && rowIndex + i >= 0,
-                        boardIndex: (i: number) => current - i * 18
+                        condition: (v: number) => colIndex + v < 19 && rowIndex - v >= 0,
+                        boardIndex: (v: number) => current - v * 18
                     },
                 ]
                 const d = direction[use.direction];
                 let j = 0;
                 while (d.condition(j)) {
                     const index = d.boardIndex(j);
-                    const r = Math.floor(index / 19);
-                    const c = index % 19;
-                    if (!tmp[index]) {
-                        tmp[index] = true;
-                        ret.push({
-                            row: r,
-                            col: c,
-                            x: boardGrid * c,
-                            y: boardGrid * r,
-                            width: boardGrid,
-                            height: boardGrid,
-                            fill: 'green',
-                        });
+                    if (!boardInfo || !boardInfo[index]) {
+                        const r = Math.floor(index / 19);
+                        const c = index % 19;
+                        if (!tmp[index]) {
+                            tmp[index] = true;
+                            ret.push({
+                                row: r,
+                                col: c,
+                                x: boardGrid * c,
+                                y: boardGrid * r,
+                                width: boardGrid,
+                                height: boardGrid,
+                                fill: stepIsWhite ? "#fff" : "#333",
+                            });
+                        }
                     }
                     j++;
                 }
             }
         }
+        console.log(ret)
         setRects(ret)
     }, [boardGrid, steps, useGrid])
 
@@ -183,7 +186,7 @@ const Board: React.FC<BoardProps> = ({
             </Group>
             <Group x={boardEdge - boardGrid / 2} y={boardEdge - boardGrid / 2}>
                 {selectGrid ? <SelectLine boardGrid={boardGrid}
-                                          color={selfIsWhite ? "#fff" : "#000"}
+                                          color={stepIsWhite ? "#fff" : "#000"}
                                           x={selectGrid.colIndex * boardGrid + boardGrid / 2}
                                           y={selectGrid.rowIndex * boardGrid + boardGrid / 2}
                 /> : <></>}
@@ -195,7 +198,7 @@ const Board: React.FC<BoardProps> = ({
                         width={rect.width}
                         height={rect.height}
                         fill={rect.fill}
-                        opacity={0.15}
+                        opacity={0.5}
                         onClick={() => onClick({rowIndex: rect.row, colIndex: rect.col})}
                         onTap={() => onClick({rowIndex: rect.row, colIndex: rect.col})}
                     />

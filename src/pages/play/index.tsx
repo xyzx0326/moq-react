@@ -170,14 +170,10 @@ const Play = () => {
                 <div className="board-body"
                      style={{height: `${boardSize.board}px`}}>
                     <Game
-                        selectGrid={game.selectGrid}
-                        selfIsWhite={game.stepIsWhite}
+                        gameInfo={game}
                         boardSize={boardSize}
                         pieces={pieces}
-                        gameIsEnd={game.gameIsEnd}
                         onGridSelect={handleGrid}
-                        steps={game.steps}
-                        useGrid={game.useGrid}
                         freeCount={rules[game.rule].freeCount}
                     />
                 </div>

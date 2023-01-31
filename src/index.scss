@@ -1,3 +1,5 @@
+@import "variable.scss";
+
 :root {
     display: flex;
     flex-direction: column;
@@ -9,8 +11,8 @@
     line-height: 1.5rem;
     font-weight: 400;
 
-    color: #fff;
-    background: linear-gradient(#00c5d2, #aaf5b8);
+    color: $globe-font-color;
+    background: $globe-background;
 }
 
 * {
@@ -32,15 +34,15 @@ body {
 }
 
 button {
-    border-radius: 0.2rem;
+    border-radius: 0.1rem;
     padding: 0.5rem 0.5rem;
     font-size: 1rem;
     font-weight: 500;
     font-family: inherit;
     height: 2rem;
     line-height: 1rem;
-    color: #00c5d2;
-    background-color: #fff;
+    color: $globe-color-1;
+    background-color: rgb(255, 255, 255, 0.8);
     border: none;
     cursor: pointer;
     user-select: none;
@@ -48,6 +50,6 @@ button {
 }
 
 button:disabled {
-    color: #aaa;
+    color: $globe-disable-color;
     cursor: default;
 }
