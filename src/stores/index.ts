@@ -5,7 +5,6 @@ import {AnyAction, configureStore} from '@reduxjs/toolkit'
 import {Reducer} from "react";
 
 const historyStore = (reducer: Reducer<any, AnyAction>) => (state = history.present, action: AnyAction) => {
-    console.log(action)
     switch (action.type) {
         case 'history/undo':
             history.undo(action.payload);

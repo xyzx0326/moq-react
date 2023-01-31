@@ -76,7 +76,7 @@ export const gameSlice = createSlice({
                     state.board[index] = state.stepIsWhite ? state.steps : -state.steps;
                     const isEnd = GameUtils.checkGameOver(state.board, index);
                     // const isEnd = false;
-                    console.log(isEnd)
+                    // console.log(isEnd)
                     if (isEnd) {
                         state.gameIsEnd = true;
                     } else {

@@ -6,7 +6,7 @@ import {GridData} from "@/stores/game";
 import Konva from "konva";
 import {LineCap, LineJoin} from "konva/lib/Shape";
 import React, {useEffect, useState} from 'react';
-import {Circle, Group, Line, Rect} from "react-konva";
+import {Circle, Group, Line, Rect, Text} from "react-konva";
 
 type BoardProps = {
     boardSize: BoardSizeType;
@@ -30,9 +30,50 @@ const Board: React.FC<BoardProps> = ({
                                          useGrid
                                      }) => {
     const [lines, setLines] = useState<Konva.LineConfig[]>([]);
+    const [texts, setTexts] = useState<Konva.TextConfig[]>([]);
     const [rects, setRects] = useState<Konva.RectConfig[]>([]);
     const {board, boardGrid, boardEdge} = boardSize;
     const stepIsWhite = steps % 2 == 1;
+    useEffect(() => {
+        const ret = [];
+        const color = '#baa17e';
+        for (let i = 1; i <= 19; i++) {
+            ret.push({
+                text: i + '',
+                fill: color,
+                x: boardEdge * 0.1,
+                verticalAlign: "middle",
+                align: "left",
+                y: boardGrid * i - 0.5 * boardEdge,
+            });
+            ret.push({
+                text: String.fromCharCode(64 + i),
+                fill: color,
+                verticalAlign: "top",
+                align: "center",
+                x: boardGrid * i - 0.5 * boardEdge,
+                y: boardEdge * 0.1,
+            });
+            ret.push({
+                text: i + '',
+                fill: color,
+                verticalAlign: "middle",
+                align: "right",
+                x: board - boardEdge * 1.1,
+                y: boardGrid * i - 0.5 * boardEdge,
+            });
+            ret.push({
+                text: String.fromCharCode(64 + i),
+                fill: color,
+                verticalAlign: "bottom",
+                align: "center",
+                x: boardGrid * i - 0.5 * boardEdge,
+                y: board - boardEdge * 1.1,
+            });
+        }
+        setTexts(ret);
+    }, [])
+
     // 棋盘线格
     useEffect(() => {
         const ret = [];
@@ -114,7 +155,7 @@ const Board: React.FC<BoardProps> = ({
 
                 const rowIndex = use.rowIndex;
                 const colIndex = use.colIndex;
-                const current = colIndex + rowIndex*19;
+                const current = colIndex + rowIndex * 19;
                 const direction = [
                     {
                         condition: (v: number) => colIndex - v >= 0,
@@ -158,7 +199,6 @@ const Board: React.FC<BoardProps> = ({
                 }
             }
         }
-        console.log(ret)
         setRects(ret)
     }, [boardGrid, steps, useGrid])
 
@@ -173,6 +213,21 @@ const Board: React.FC<BoardProps> = ({
                 height={board}
                 fill='#eee1bb'
             />
+            <Group>
+                {texts.map((text, i) =>
+                    <Text
+                        key={i}
+                        text={text.text}
+                        fill={text.fill}
+                        width={boardEdge}
+                        height={boardEdge}
+                        verticalAlign={text.verticalAlign}
+                        align={text.align}
+                        x={text.x}
+                        y={text.y}
+                    />
+                )}
+            </Group>
             <Group x={boardEdge} y={boardEdge}>
                 {lines.map((line, i) =>
                     <Line
@@ -197,10 +252,10 @@ const Board: React.FC<BoardProps> = ({
                             <Circle
                                 key={i + 'c'}
                                 fill={rect.fill}
-                                x={rect.x!+boardGrid/2}
-                                y={rect.y!+boardGrid/2}
-                                width={rect.width!-1}
-                                height={rect.height!-1}
+                                x={rect.x! + boardGrid / 2}
+                                y={rect.y! + boardGrid / 2}
+                                width={rect.width! - 1}
+                                height={rect.height! - 1}
                                 opacity={0.15}/> : null
                         }
                         <Rect

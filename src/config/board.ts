@@ -3,8 +3,8 @@ const basic = Math.min(window.innerWidth, window.innerHeight, 640) - 20;
 
 export const boardSize = {
     board: basic,
-    boardEdge: basic * 0.035,
-    boardGrid: basic * 0.05166667,
+    boardEdge: basic * 0.05,
+    boardGrid: basic * 0.05,
     pieceRadius: basic * 0.022
 }
 
