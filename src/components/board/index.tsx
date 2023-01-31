@@ -6,7 +6,7 @@ import {GridData} from "@/stores/game";
 import Konva from "konva";
 import {LineCap, LineJoin} from "konva/lib/Shape";
 import React, {useEffect, useState} from 'react';
-import {Group, Line, Rect} from "react-konva";
+import {Circle, Group, Line, Rect} from "react-konva";
 
 type BoardProps = {
     boardSize: BoardSizeType;
@@ -149,7 +149,8 @@ const Board: React.FC<BoardProps> = ({
                                 y: boardGrid * r,
                                 width: boardGrid,
                                 height: boardGrid,
-                                fill: stepIsWhite ? "#fff" : "#333",
+                                fill: stepIsWhite ? "green" : "red",
+                                // fill: "green"
                             });
                         }
                     }
@@ -191,17 +192,29 @@ const Board: React.FC<BoardProps> = ({
                                           y={selectGrid.rowIndex * boardGrid + boardGrid / 2}
                 /> : <></>}
                 {rects.map((rect, i) =>
-                    <Rect
-                        key={i}
-                        x={rect.x}
-                        y={rect.y}
-                        width={rect.width}
-                        height={rect.height}
-                        fill={rect.fill}
-                        opacity={0.5}
-                        onClick={() => onClick({rowIndex: rect.row, colIndex: rect.col})}
-                        onTap={() => onClick({rowIndex: rect.row, colIndex: rect.col})}
-                    />
+                    <>
+                        {rect.fill ?
+                            <Circle
+                                key={i + 'c'}
+                                fill={rect.fill}
+                                x={rect.x!+boardGrid/2}
+                                y={rect.y!+boardGrid/2}
+                                width={rect.width!-1}
+                                height={rect.height!-1}
+                                opacity={0.15}/> : null
+                        }
+                        <Rect
+                            key={i}
+                            x={rect.x}
+                            y={rect.y}
+                            width={rect.width}
+                            height={rect.height}
+                            // fill={rect.fill}
+                            opacity={0.35}
+                            onClick={() => onClick({rowIndex: rect.row, colIndex: rect.col})}
+                            onTap={() => onClick({rowIndex: rect.row, colIndex: rect.col})}
+                        />
+                    </>
                 )}
             </Group>
         </Group>
