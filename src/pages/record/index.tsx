@@ -5,17 +5,9 @@ import {boardSize} from "@/config/board";
 import modes from '@/config/modes'
 import rules from "@/config/rules";
 import {useGo, usePieces, useRemoteGo, useStore} from "@/hooks";
-import {
-    changeSelfColor,
-    GameFrameData,
-    GridData,
-    handleRestart,
-    handleSelectGrid,
-    updateSelfColor
-} from "@/stores/game";
-import {redo, undo} from "@/stores/history";
+import {changeSelfColor, GameFrameData, GridData, handleSelectGrid, restart, updateSelfColor} from "@/stores/game";
 import {addRoom, configRoom, leaveRoom, resetRoom} from '@illuxiza/one-client';
-import {useOnline} from "@illuxiza/one-client-react";
+import {redo, undo, useOnline} from "@illuxiza/one-client-react";
 import React, {useState} from 'react';
 import {useParams} from "react-router-dom";
 import {useMount, useUpdateEffect} from "react-use";
@@ -23,9 +15,8 @@ import {useMount, useUpdateEffect} from "react-use";
 import './index.scss'
 
 
-
 const Record = () => {
-    const game:GameFrameData = useStore(state => state.game);
+    const game: GameFrameData = useStore(state => state.game);
     const [pause, setPause] = useState(false);
     const online = useOnline();
     const pieces = usePieces(game.board);
@@ -42,7 +33,7 @@ const Record = () => {
 
 
     useMount(() => {
-        go(handleRestart())
+        go(restart())
         if (mode === 'local' && game.selfIsWhite) {
             go(changeSelfColor())
         }
@@ -118,7 +109,7 @@ const Record = () => {
         if (mode === "remote" && !online.isPlayer) {
             return;
         }
-        remoteGo(handleRestart());
+        remoteGo(restart());
         if (mode === "remote") {
             resetRoom()
         }
@@ -144,7 +135,7 @@ const Record = () => {
     return (
         <div className="main" style={{width: `${boardSize.board}px`}}>
             <Nav title={cfg.title} onBack={onBack}
-                onSetting={() => setShowRule(true)}
+                 onSetting={() => setShowRule(true)}
             />
             <Header mode={mode} selfIsWhite={game.selfIsWhite} otherSideOnline={online.playerCount === 2}
                     channelId={params.roomId ? params.roomId!.substring(0, 4) : ''} isViewer={!online.isPlayer}

@@ -5,7 +5,7 @@
   "private": true,
   "dependencies": {
     "@illuxiza/one-client": "^0.0.2",
-    "@illuxiza/one-client-react": "^0.0.2",
+    "@illuxiza/one-client-react": "^0.0.14",
     "@reduxjs/toolkit": "^1.8.4",
     "file-saver": "^2.0.5",
     "gif.js": "^0.2.0",
@@ -21,6 +21,7 @@
   "scripts": {
     "start": "vite",
     "build": "tsc && vite build",
+    "publish": "scp -r dist/* congeer:/data/nginx/main/html/game/moqt/",
     "preview": "vite preview"
   },
   "eslintConfig": {

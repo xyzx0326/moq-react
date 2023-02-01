@@ -1,4 +1,4 @@
-import {Modal} from "@/components";
+import {Modal} from "@illuxiza/one-client-react";
 import {boardSize} from "@/config/board";
 import rules, {RuleKey} from "@/config/rules";
 import {useRemoteGo, useStore} from "@/hooks";

@@ -9,11 +9,11 @@ import {
     changeSelfColor,
     GameFrameData,
     GridData,
-    handleRestart,
+    restart,
     handleSelectGrid,
     updateSelfColor
 } from "@/stores/game";
-import {redo, undo} from "@/stores/history";
+import {redo, undo} from "@illuxiza/one-client-react";
 import {addRoom, configRoom, leaveRoom, resetRoom} from '@illuxiza/one-client';
 import {useOnline} from "@illuxiza/one-client-react";
 import React, {useState} from 'react';
@@ -44,7 +44,7 @@ const Play = () => {
 
 
     useMount(() => {
-        go(handleRestart())
+        go(restart())
         if (mode === 'local' && game.selfIsWhite) {
             go(changeSelfColor())
         }
@@ -120,7 +120,7 @@ const Play = () => {
         if (mode === "remote" && !online.isPlayer) {
             return;
         }
-        remoteGo(handleRestart());
+        remoteGo(restart());
         if (mode === "remote") {
             resetRoom()
         }

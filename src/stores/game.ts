@@ -1,4 +1,4 @@
-import {defaultRule, DirectionData, Rule, RuleKey, rules} from "@/config/rules";
+import {defaultRule, DirectionData, RuleKey, rules} from "@/config/rules";
 import {CACHE_RULE_KEY, CacheUtils, GameUtils} from "@/utils";
 import {createSlice} from '@reduxjs/toolkit'
 
@@ -47,7 +47,7 @@ export const gameSlice = createSlice({
         /**
          * 重开游戏
          */
-        handleRestart(state) {
+        restart(state) {
             state.gameIsEnd = false;
             if (rules[state.rule].start == 2) {
                 state.stepIsWhite = true;
@@ -115,7 +115,7 @@ export const gameSlice = createSlice({
 })
 
 export const {
-    handleRestart,
+    restart,
     changeSelfColor,
     handleSelectGrid,
     updateRule,

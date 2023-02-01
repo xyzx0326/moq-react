@@ -1,9 +1,9 @@
-import {Game, Modal} from "@/components";
+import {Game} from "@/components";
 import {boardScale, boardSize} from "@/config/board";
 import rules, {defaultRule} from "@/config/rules";
 import {usePieces, useStore} from "@/hooks";
 import {GameFrameData} from "@/stores/game";
-import history from "@/stores/history";
+import {history, Modal} from "@illuxiza/one-client-react";
 import {saveAs} from 'file-saver';
 import moment from "moment";
 
