@@ -49,7 +49,11 @@ export const gameSlice = createSlice({
          */
         handleRestart(state) {
             state.gameIsEnd = false;
-            state.stepIsWhite = false;
+            if (rules[state.rule].start == 2) {
+                state.stepIsWhite = true;
+            } else {
+                state.stepIsWhite = false;
+            }
             state.selectGrid = undefined;
             state.steps = 0;
             state.board = []
@@ -74,7 +78,7 @@ export const gameSlice = createSlice({
                 if (state.selectGrid && state.selectGrid.rowIndex === payload.rowIndex && state.selectGrid.colIndex === payload.colIndex) {
                     state.steps++;
                     state.board[index] = state.stepIsWhite ? state.steps : -state.steps;
-                    const isEnd = GameUtils.checkGameOver(state.board, index);
+                    const isEnd = GameUtils.checkGameOver(state.board, index, state.rule);
                     // const isEnd = false;
                     // console.log(isEnd)
                     if (isEnd) {
@@ -95,6 +99,16 @@ export const gameSlice = createSlice({
         updateRule(state, {payload}) {
             state.rule = payload
             CacheUtils.setItem(CACHE_RULE_KEY, state.rule)
+            state.gameIsEnd = false;
+            if (rules[state.rule].start == 2) {
+                state.stepIsWhite = true;
+            } else {
+                state.stepIsWhite = false;
+            }
+            state.selectGrid = undefined;
+            state.steps = 0;
+            state.board = []
+            state.useGrid = [];
         },
 
     },

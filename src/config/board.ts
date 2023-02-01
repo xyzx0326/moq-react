@@ -15,7 +15,6 @@ export const boardScale = (scale = 1) => {
         boardEdge: boardSize.boardEdge * scale,
         pieceRadius: boardSize.pieceRadius * scale
     }
-
 }
 
 export type BoardSizeType = typeof boardSize

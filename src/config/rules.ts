@@ -67,6 +67,8 @@ export const rules = {
     "0.2": {
         title: "墨棋0.2",
         freeCount:2,
+        start: 1,
+        winCount: [5,5,5,5],
         useGrid: getUseGrid((board: number[], index: number) => {
             return board[index] < 0 ? 1 : 2;
         })
@@ -74,6 +76,8 @@ export const rules = {
     "0.25": {
         title: "墨棋0.25",
         freeCount:2,
+        start: 1,
+        winCount: [5,5,5,5],
         useGrid: getUseGrid((board: number[], index: number) => {
             return board[index] < 0 ? 1 : 1.5;
         })
@@ -87,10 +91,21 @@ export const rules = {
     "0.4": {
         title: "墨棋0.4",
         freeCount:3,
+        start: 1,
+        winCount: [5,5,5,5],
         useGrid: getUseGrid((board: number[], index: number) => {
             return board[index] < 0 ? 1 : 2;
         })
-    }
+    },
+    "0.5": {
+        title: "墨棋0.5",
+        freeCount:2,
+        start: 2,
+        winCount: [6,6,5,5],
+        useGrid: getUseGrid((board: number[], index: number) => {
+            return board[index] < 0 ? 1 : 2;
+        })
+    },
 };
 
 export type DirectionData = { direction: number } & GridData;

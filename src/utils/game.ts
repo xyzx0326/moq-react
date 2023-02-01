@@ -1,4 +1,4 @@
-import {Rule} from "@/config/rules";
+import {Rule, RuleKey, rules} from "@/config/rules";
 
 export interface Step {
     num: number;
@@ -32,20 +32,21 @@ export class GameUtils {
      * @param current 当前步index
      * @returns
      */
-    static checkGameOver(board: number[], current: number) {
-        return this.isFive(board, current);
+    static checkGameOver(board: number[], current: number, rule: RuleKey) {
+        return this.isFive(board, current, rule);
     }
 
-    static isFive(board: number[], current: number) {
-        const rowIndex = Math.floor(current / 19);
-        const colIndex = current % 19;
+    static isFive(board: number[], current: number, rule: RuleKey) {
+        const gridNum = 19;
+        const rowIndex = Math.floor(current / gridNum);
+        const colIndex = current % gridNum;
         const stepIsWhite = board[current] > 0;
 
         // 横+, 横-, 竖+, 竖-, 横+竖+, 横-竖-, 横+竖-, 横-竖+
         const direction = [
             {
                 flag: true,
-                condition: (i: number) => colIndex + i < 19,
+                condition: (i: number) => colIndex + i < gridNum,
                 boardIndex: (i: number) => current + i
             },
             {
@@ -55,33 +56,33 @@ export class GameUtils {
             },
             {
                 flag: true,
-                condition: (i: number) => rowIndex + i < 19,
-                boardIndex: (i: number) => current + i * 19
+                condition: (i: number) => rowIndex + i < gridNum,
+                boardIndex: (i: number) => current + i * gridNum
             },
             {
                 flag: true,
                 condition: (i: number) => rowIndex - i >= 0,
-                boardIndex: (i: number) => current - i * 19
+                boardIndex: (i: number) => current - i * gridNum
             },
             {
                 flag: true,
-                condition: (i: number) => colIndex + i < 19 && rowIndex + i < 19,
-                boardIndex: (i: number) => current + i * 20
+                condition: (i: number) => colIndex + i < gridNum && rowIndex + i < gridNum,
+                boardIndex: (i: number) => current + i * (gridNum+1)
             },
             {
                 flag: true,
                 condition: (i: number) => colIndex - i >= 0 && rowIndex - i >= 0,
-                boardIndex: (i: number) => current - i * 20
+                boardIndex: (i: number) => current - i * (gridNum+1)
             },
             {
                 flag: true,
-                condition: (i: number) => colIndex - i >= 0 && rowIndex + i < 19,
-                boardIndex: (i: number) => current + i * 18
+                condition: (i: number) => colIndex - i >= 0 && rowIndex + i < gridNum,
+                boardIndex: (i: number) => current + i * (gridNum-1)
             },
             {
                 flag: true,
-                condition: (i: number) => colIndex + i < 19 && rowIndex - i >= 0,
-                boardIndex: (i: number) => current - i * 18
+                condition: (i: number) => colIndex + i < gridNum && rowIndex - i >= 0,
+                boardIndex: (i: number) => current - i * (gridNum-1)
             },
         ]
         // 横, 竖, 横+竖+, 横+竖-
@@ -100,13 +101,13 @@ export class GameUtils {
             }
         }
 
-        for (let i = 1; i < 5; i++) {
+        for (let i = 1; i < 10; i++) {
             for (let j = 0; j < direction.length; j++) {
                 const one = direction[j];
                 if (one.flag && one.condition(i)) {
                     handle(one.boardIndex(i), j);
                     const countIndex = Math.floor(j / 2);
-                    if (count[countIndex] >= 5) {
+                    if (count[countIndex] >= rules[rule].winCount[countIndex]) {
                         return true
                     }
                 }

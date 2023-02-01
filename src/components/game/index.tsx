@@ -18,17 +18,12 @@ const Game: React.FC<GameProps> = forwardRef((props, ref: any) => {
     const {
         pieces, gameInfo, boardSize, onGridSelect, freeCount,
     } = props;
-    const {
-        selectGrid, gameIsEnd, steps, useGrid, board: boardInfo
-    } = gameInfo
     const {board, boardGrid, boardEdge, pieceRadius} = boardSize
 
     return (
         <Stage width={board} height={board}>
             <Layer ref={ref}>
-                <Board boardSize={boardSize} selectGrid={selectGrid} isEnd={gameIsEnd}
-                       onGridSelect={onGridSelect} steps={steps} useGrid={useGrid} freeCount={freeCount}
-                       boardInfo={boardInfo}/>
+                <Board boardSize={boardSize} gameInfo={gameInfo} onGridSelect={onGridSelect} freeCount={freeCount}/>
                 <Group x={boardEdge} y={boardEdge}>
                     {pieces.map(piece => {
                         return <Piece key={piece.num}
@@ -37,7 +32,7 @@ const Game: React.FC<GameProps> = forwardRef((props, ref: any) => {
                                       colIndex={piece.colIndex}
                                       boardGrid={boardGrid}
                                       radius={pieceRadius}
-                                      isEnd={gameIsEnd}
+                                      isEnd={gameInfo.gameIsEnd}
                                       isLast={piece.isLast}
                         />;
                     })}

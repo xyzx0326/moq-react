@@ -1,7 +1,6 @@
 import {SelectLine} from "@/components";
 import {BoardSizeType} from "@/config/board";
-import {DirectionData} from "@/config/rules";
-import {GridData} from "@/stores/game";
+import {GameFrameData, GridData} from "@/stores/game";
 
 import Konva from "konva";
 import {LineCap, LineJoin} from "konva/lib/Shape";
@@ -10,12 +9,8 @@ import {Circle, Group, Line, Rect, Text} from "react-konva";
 
 type BoardProps = {
     boardSize: BoardSizeType;
-    selectGrid?: GridData;
-    steps?: number;
-    useGrid?: DirectionData[];
-    boardInfo?: number[];
     freeCount?: number;
-    isEnd?: boolean;
+    gameInfo: GameFrameData;
 
     onGridSelect?: (data: GridData) => void;
 }
@@ -23,19 +18,18 @@ type BoardProps = {
 
 const Board: React.FC<BoardProps> = ({
                                          boardSize,
-                                         selectGrid,
                                          onGridSelect,
-                                         steps = 1,
-                                         boardInfo,
                                          freeCount,
-                                         useGrid,
-                                         isEnd
+                                         gameInfo,
                                      }) => {
     const [lines, setLines] = useState<Konva.LineConfig[]>([]);
     const [texts, setTexts] = useState<Konva.TextConfig[]>([]);
     const [rects, setRects] = useState<Konva.RectConfig[]>([]);
+    const {
+        selectGrid, gameIsEnd, steps, useGrid, board: boardInfo, stepIsWhite
+    } = gameInfo
     const {board, boardGrid, boardEdge} = boardSize;
-    const stepIsWhite = steps % 2 == 1;
+
     useEffect(() => {
         const ret = [];
         const color = '#baa17e';
@@ -138,7 +132,7 @@ const Board: React.FC<BoardProps> = ({
     useEffect(() => {
         const ret = [];
         const tmp = [];
-        if (!isEnd) {
+        if (!gameIsEnd) {
             if (!freeCount || steps < freeCount || !useGrid) {
                 for (let i = 0; i < 19; i++) {
                     for (let j = 0; j < 19; j++) {
@@ -204,7 +198,7 @@ const Board: React.FC<BoardProps> = ({
             }
         }
         setRects(ret)
-    }, [boardGrid, steps, useGrid, isEnd])
+    }, [boardGrid, steps, useGrid, gameIsEnd])
 
     const onClick = (data: GridData) => {
         onGridSelect && onGridSelect(data)
