@@ -18,7 +18,7 @@ function Home() {
             <button onClick={() => navigate(`/play/remote/${nanoid()}`)}>
                 线上与人对战
             </button>
-            <button onClick={() => navigate("/play/ai")} disabled>
+            <button onClick={() => navigate("/play/ai")}>
                 与机器对战
             </button>
         </div>

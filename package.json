@@ -1,12 +1,13 @@
 {
   "name": "moq",
   "version": "0.1.0",
-  "homepage": "moqt",
+  "homepage": "moq",
   "private": true,
   "dependencies": {
-    "@illuxiza/one-client": "^0.0.2",
-    "@illuxiza/one-client-react": "^0.0.14",
+    "@illuxiza/one-client": "^0.0.3",
+    "@illuxiza/one-client-react": "^0.0.15",
     "@reduxjs/toolkit": "^1.8.4",
+    "axios": "^1.3.1",
     "file-saver": "^2.0.5",
     "gif.js": "^0.2.0",
     "konva": "^8.3.11",
@@ -21,7 +22,7 @@
   "scripts": {
     "start": "vite",
     "build": "tsc && vite build",
-    "publish": "scp -r dist/* congeer:/data/nginx/main/html/game/moqt/",
+    "publish": "scp -r dist/* congeer:/data/nginx/main/html/game/moq/",
     "preview": "vite preview"
   },
   "eslintConfig": {

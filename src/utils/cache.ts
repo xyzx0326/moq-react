@@ -31,4 +31,4 @@ export class CacheUtils {
     }
 }
 
-export const CACHE_RULE_KEY = "moqt_rule";
+export const CACHE_RULE_KEY = "moq_rule";

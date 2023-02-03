@@ -38,6 +38,10 @@
             align-items: center;
             justify-content: space-between;
 
+            .header-button {
+                display: flex;
+                flex-direction: row;
+            }
             .step {
                 display: flex;
                 align-items: center;

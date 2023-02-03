@@ -9,7 +9,7 @@ export type PieceType = {
     isLast: boolean;
 };
 
-export type GridData = { rowIndex: number; colIndex: number };
+export type GridData = { rowIndex: number; colIndex: number; ai?: boolean };
 
 export type GameFrameData = {
     steps: number; // 步数
@@ -71,11 +71,13 @@ export const gameSlice = createSlice({
         handleSelectGrid(state, {payload}) {
             const colIndex = payload.colIndex;
             const rowIndex = payload.rowIndex;
+            const ai = payload.ai;
             const index = rowIndex * 19 + colIndex;
 
             // 如果此格没有棋子，则可以选择
             if (!state.board[index]) {
-                if (state.selectGrid && state.selectGrid.rowIndex === payload.rowIndex && state.selectGrid.colIndex === payload.colIndex) {
+                const b = state.selectGrid && state.selectGrid.rowIndex === payload.rowIndex && state.selectGrid.colIndex === payload.colIndex;
+                if (b || ai) {
                     state.steps++;
                     state.board[index] = state.stepIsWhite ? state.steps : -state.steps;
                     const isEnd = GameUtils.checkGameOver(state.board, index, state.rule);

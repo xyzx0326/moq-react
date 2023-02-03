@@ -1,5 +1,7 @@
+@import '@illuxiza/one-client-react/styles/variable';
+
 .rule-setting {
-    margin: 1rem 0 0.5rem;
+    margin: 1rem 0.5rem 2rem;
 
     .rule-item {
         display: flex;
@@ -20,7 +22,7 @@
                 font-size: 0.8rem;
                 line-height: 1.4rem;
                 margin-top: 0.4rem;
-                color: #aaa;
+                color:#fff;
             }
         }
     }

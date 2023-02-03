@@ -17,7 +17,7 @@ const Footer: React.FC<FooterProps> = ({mode, selfIsWhite, isViewer, children, d
         <div className="footer">
             {mode !== 'local' ?
                 <div className="color-piece">
-                    {isViewer ? <span>观众席</span> : <>
+                    {isViewer && mode === "remote" ? <span>观众席</span> : <>
                         <img className="piece-img"
                              src={selfIsWhite ? white : black}
                              alt=""

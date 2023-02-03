@@ -9,13 +9,14 @@ import {
     changeSelfColor,
     GameFrameData,
     GridData,
-    restart,
     handleSelectGrid,
+    restart,
+    updateRule,
     updateSelfColor
 } from "@/stores/game";
-import {redo, undo} from "@illuxiza/one-client-react";
 import {addRoom, configRoom, leaveRoom, resetRoom} from '@illuxiza/one-client';
-import {useOnline} from "@illuxiza/one-client-react";
+import {redo, undo, useOnline} from "@illuxiza/one-client-react";
+import axios from "axios";
 import React, {useState} from 'react';
 import {useParams} from "react-router-dom";
 import {useMount, useUpdateEffect} from "react-use";
@@ -27,7 +28,7 @@ import RuleSetting from "./setting";
 
 
 const Play = () => {
-    const game:GameFrameData = useStore(state => state.game);
+    const game: GameFrameData = useStore(state => state.game);
     const [pause, setPause] = useState(false);
     const online = useOnline();
     const pieces = usePieces(game.board);
@@ -38,6 +39,7 @@ const Play = () => {
     const cfg = modes[mode];
     const [open, setOpen] = useState(false);
     const [showRule, setShowRule] = useState(false);
+    const [level, setLevel] = useState("test");
 
 
     const sameColor = game.selfIsWhite === game.stepIsWhite;
@@ -52,22 +54,41 @@ const Play = () => {
             const roomParam = params.roomId!;
             addRoom(roomParam)
         }
+        if (mode === "ai") {
+            go(updateRule("0.4"));
+            setShowRule(true);
+        }
     })
 
     useUpdateEffect(() => {
         if (!pause && mode === 'ai' && !sameColor && !game.gameIsEnd) {
-            // 延时执行，避免操作太快看不清
-            // setTimeout(() => {
-            // const nextStep = GameUtils.aiNextStep(
-            //     [...gameStore.board],
-            //     gameStore.stepIsWhite,
-            //     !gameStore.selfIsWhite,
-            //     gameStore.rule
-            // );
-            // if (nextStep) {
-            //     // go(handlePiecePut(nextStep));
-            // }
-            // }, 500);
+            let b: number[][] = [];
+            for (let y = 0; y < 19; y++) {
+                b[y] = [];
+                for (let x = 0; x < 19; x++) {
+                    if (game.board[x + y * 19] < 0) {
+                        b[y][x] = 1;
+                    } else if (game.board[x + y * 19] > 0) {
+                        b[y][x] = 2;
+                    } else {
+                        b[y][x] = 0;
+                    }
+                }
+            }
+            let player = game.selfIsWhite ? 1 : 2;
+            axios.post("/moq/ai", {
+                board: b,
+                player,
+                level,
+                version: game.rule
+            }).then((res) => {
+                let data: GridData = {
+                    rowIndex: res.data.y,
+                    colIndex: res.data.x,
+                    ai: true,
+                }
+                setTimeout(() => go(handleSelectGrid(data)), 500);
+            })
         }
     })
 
@@ -146,16 +167,18 @@ const Play = () => {
     return (
         <div className="main" style={{width: `${boardSize.board}px`}}>
             <Nav title={cfg.title} onBack={onBack}
-                onSetting={() => setShowRule(true)}
+                 onSetting={() => setShowRule(true)}
             />
             <Header mode={mode} selfIsWhite={game.selfIsWhite} otherSideOnline={online.playerCount === 2}
                     channelId={params.roomId ? params.roomId!.substring(0, 4) : ''} isViewer={!online.isPlayer}
                     selfId={online.playerId} players={online.players}/>
             <div className="board">
                 <div className="board-header">
-                    <div>
+                    <div className="header-button">
                         <button style={{marginRight: '10px'}} onClick={restartGame}
                                 disabled={!game.gameIsEnd || (mode == "remote" && !online.isPlayer)}>重开
+                        </button>
+                        <button style={{marginRight: '10px'}} onClick={() => setPause(!pause)}>{pause ? '开始' : '暂停'}
                         </button>
                     </div>
                     {!game.gameIsEnd ?
@@ -202,7 +225,8 @@ const Play = () => {
                 <div>{endBecause}</div>
             </div>
             <StepRecord open={open} mode={mode} onClose={() => setOpen(false)}/>
-            <RuleSetting open={showRule} mode={mode} onClose={() => setShowRule(false)}/>
+            <RuleSetting open={showRule} mode={mode} level={level} setLevel={setLevel}
+                         onClose={() => setShowRule(false)}/>
         </div>
     );
 }

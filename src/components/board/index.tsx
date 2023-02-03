@@ -214,7 +214,7 @@ const Board: React.FC<BoardProps> = ({
             <Group>
                 {texts.map((text, i) =>
                     <Text
-                        key={i}
+                        key={i + "t"}
                         text={text.text}
                         fill={text.fill}
                         width={boardEdge}
@@ -229,7 +229,7 @@ const Board: React.FC<BoardProps> = ({
             <Group x={boardEdge} y={boardEdge}>
                 {lines.map((line, i) =>
                     <Line
-                        key={i}
+                        key={i + "l"}
                         points={line.points}
                         stroke={line.stroke}
                         strokeWidth={line.strokeWidth}
@@ -245,10 +245,9 @@ const Board: React.FC<BoardProps> = ({
                                           y={selectGrid.rowIndex * boardGrid + boardGrid / 2}
                 /> : <></>}
                 {rects.map((rect, i) =>
-                    <>
+                    <Group key={i + 'g'}>
                         {rect.fill ?
                             <Circle
-                                key={i + 'c'}
                                 fill={rect.fill}
                                 x={rect.x! + boardGrid / 2}
                                 y={rect.y! + boardGrid / 2}
@@ -257,7 +256,6 @@ const Board: React.FC<BoardProps> = ({
                                 opacity={0.15}/> : null
                         }
                         <Rect
-                            key={i}
                             x={rect.x}
                             y={rect.y}
                             width={rect.width}
@@ -267,7 +265,7 @@ const Board: React.FC<BoardProps> = ({
                             onClick={() => onClick({rowIndex: rect.row, colIndex: rect.col})}
                             onTap={() => onClick({rowIndex: rect.row, colIndex: rect.col})}
                         />
-                    </>
+                    </Group>
                 )}
             </Group>
         </Group>
