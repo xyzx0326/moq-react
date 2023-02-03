@@ -26,6 +26,8 @@ export default defineConfig(() => {
     return {
         base: '/moq/',
         plugins: [react(), htmlPlugin()],
+        envDir: './config',
+        envPrefix: 'moq',
         resolve: {
             alias: {
                 tslib: 'tslib',

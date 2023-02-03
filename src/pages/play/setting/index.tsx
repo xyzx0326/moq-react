@@ -1,7 +1,7 @@
 import {boardSize} from "@/config/board";
 import rules, {RuleKey} from "@/config/rules";
 import {useGo, useStore} from "@/hooks";
-import {updateRule} from "@/stores/game";
+import {updateRule, updateSelfColor} from "@/stores/game";
 import {configRoom, resetRoom} from "@illuxiza/one-client";
 import {Modal} from "@illuxiza/one-client-react";
 
@@ -29,7 +29,7 @@ const RuleSetting: React.FC<SettingProps> = ({open, mode, level, setLevel, onClo
         }
     });
     const levelList = [{
-        label: "测试",
+        label: "学习",
         code: "test"
     }, {label: "入门", code: "start"}, {
         label: "低级",
@@ -62,6 +62,37 @@ const RuleSetting: React.FC<SettingProps> = ({open, mode, level, setLevel, onClo
             {mode == "ai" ?
                 <>
                     <div className="board-setting">
+                        <div className="board-item">黑白</div>
+                    </div>
+                    <div className="board-setting">
+                        <div className="board-item">
+                            <div className="board-item-check">
+                                <input
+                                    type="radio"
+                                    checked={!game.selfIsWhite}
+                                    onChange={() => go(updateSelfColor(false))
+                                    }
+                                />
+                            </div>
+                            <div className="board-item-info">
+                                <div className="board-item-title">黑</div>
+                            </div>
+                        </div>
+                        <div className="board-item">
+                            <div className="board-item-check">
+                                <input
+                                    type="radio"
+                                    checked={game.selfIsWhite}
+                                    onChange={() => go(updateSelfColor(true))
+                                    }
+                                />
+                            </div>
+                            <div className="board-item-info">
+                                <div className="board-item-title">白</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="board-setting">
                         <div className="board-item">AI等级：</div>
                     </div>
                     <div className="board-setting">
@@ -72,7 +103,7 @@ const RuleSetting: React.FC<SettingProps> = ({open, mode, level, setLevel, onClo
                                     <input
                                         type="radio"
                                         checked={l.code == level}
-                                        disabled={game.rule == "0.5" && l.code != "test"}
+                                        disabled={game.rule == "0.5" && l.code == "high"}
                                         onChange={() => setLevel && setLevel(l.code)}
                                     />
                                 </div>

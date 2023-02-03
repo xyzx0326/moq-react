@@ -13,16 +13,6 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 
 import '@illuxiza/one-client-react/index.scss';
 
-// const url = "10.21.124.52:8888";
-const url = "game.congeer.com";
-configClient("ws://" + url + "/game/ws", {
-    maxPlayer: 2,
-    baseConfig: [JSON.stringify(updateRule(CacheUtils.getItem(CACHE_RULE_KEY, defaultRule)))],
-    debug: false,
-    playerConfig: [[blackJson], [whiteJson]],
-    onConfig: store.dispatch,
-    onFrame: store.dispatch
-}, "moq")
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement

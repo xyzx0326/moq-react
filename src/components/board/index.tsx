@@ -1,5 +1,6 @@
 import {SelectLine} from "@/components";
 import {BoardSizeType} from "@/config/board";
+import rules from "@/config/rules";
 import {GameFrameData, GridData} from "@/stores/game";
 
 import Konva from "konva";
@@ -11,6 +12,7 @@ type BoardProps = {
     boardSize: BoardSizeType;
     freeCount?: number;
     gameInfo: GameFrameData;
+    showPrediction?: boolean
 
     onGridSelect?: (data: GridData) => void;
 }
@@ -21,12 +23,14 @@ const Board: React.FC<BoardProps> = ({
                                          onGridSelect,
                                          freeCount,
                                          gameInfo,
+                                         showPrediction,
                                      }) => {
     const [lines, setLines] = useState<Konva.LineConfig[]>([]);
     const [texts, setTexts] = useState<Konva.TextConfig[]>([]);
     const [rects, setRects] = useState<Konva.RectConfig[]>([]);
+    const [predictions, setPredictions] = useState<Konva.RectConfig[]>([]);
     const {
-        selectGrid, gameIsEnd, steps, useGrid, board: boardInfo, stepIsWhite
+        selectGrid, gameIsEnd, steps, useGrid, board: boardInfo, stepIsWhite, rule
     } = gameInfo
     const {board, boardGrid, boardEdge} = boardSize;
 
@@ -127,6 +131,67 @@ const Board: React.FC<BoardProps> = ({
         })
         setLines(ret)
     }, [board, boardGrid, boardEdge])
+
+    useEffect(() => {
+        if (selectGrid && steps >= rules[rule].freeCount - 1 && showPrediction) {
+            const ret = [];
+            const tmp = [];
+            const bp = JSON.parse(JSON.stringify(boardInfo))
+            bp[selectGrid.rowIndex * 19 + selectGrid.colIndex] = stepIsWhite ? 99 : -99;
+            const useGrid = rules[rule].useGrid(bp, !stepIsWhite!);
+            for (let i = 0; i < useGrid!.length; i++) {
+                const use = useGrid![i];
+
+                const rowIndex = use.rowIndex;
+                const colIndex = use.colIndex;
+                const current = colIndex + rowIndex * 19;
+                const direction = [
+                    {
+                        condition: (v: number) => colIndex - v >= 0,
+                        boardIndex: (v: number) => current - v
+                    },
+                    {
+                        condition: (v: number) => rowIndex - v >= 0,
+                        boardIndex: (v: number) => current - v * 19
+                    },
+                    {
+                        condition: (v: number) => colIndex - v >= 0 && rowIndex - v >= 0,
+                        boardIndex: (v: number) => current - v * 20
+                    },
+                    {
+                        condition: (v: number) => colIndex + v < 19 && rowIndex - v >= 0,
+                        boardIndex: (v: number) => current - v * 18
+                    },
+                ]
+                const d = direction[use.direction];
+                let j = 0;
+                while (d.condition(j)) {
+                    const index = d.boardIndex(j);
+                    if (!boardInfo || !boardInfo[index]) {
+                        const r = Math.floor(index / 19);
+                        const c = index % 19;
+                        if (!tmp[index]) {
+                            tmp[index] = true;
+                            ret.push({
+                                row: r,
+                                col: c,
+                                x: boardGrid * c,
+                                y: boardGrid * r,
+                                width: boardGrid,
+                                height: boardGrid,
+                                fill: stepIsWhite ? "red" : "green",
+                                // fill: "green"
+                            });
+                        }
+                    }
+                    j++;
+                }
+            }
+            setPredictions(ret)
+        } else {
+            setPredictions([]);
+        }
+    }, [selectGrid])
 
     //隐形操作区
     useEffect(() => {
@@ -244,6 +309,16 @@ const Board: React.FC<BoardProps> = ({
                                           x={selectGrid.colIndex * boardGrid + boardGrid / 2}
                                           y={selectGrid.rowIndex * boardGrid + boardGrid / 2}
                 /> : <></>}
+                {predictions.map((rect, i) =>
+                    <Circle
+                        key={i}
+                        fill={rect.fill}
+                        x={rect.x! + boardGrid / 2}
+                        y={rect.y! + boardGrid / 2}
+                        width={rect.width! * 0.6}
+                        height={rect.height! * 0.6}
+                        opacity={0.15}/>
+                )}
                 {rects.map((rect, i) =>
                     <Group key={i + 'g'}>
                         {rect.fill ?

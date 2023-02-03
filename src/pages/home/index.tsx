@@ -8,6 +8,7 @@ import './index.scss'
 
 function Home() {
     const navigate = useNavigate();
+
     return (
         <div className="home">
             <img className="logo" src={logo} alt=""/>

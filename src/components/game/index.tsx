@@ -10,20 +10,21 @@ type GameProps = {
     pieces: PieceType[]; // 棋子数据
     boardSize: BoardSizeType; // 棋盘规格
     freeCount?: number;
+    showPrediction?: boolean;
 
     onGridSelect?: (data: GridData) => void;
 }
 
 const Game: React.FC<GameProps> = forwardRef((props, ref: any) => {
     const {
-        pieces, gameInfo, boardSize, onGridSelect, freeCount,
+        pieces, gameInfo, boardSize, onGridSelect, freeCount,showPrediction
     } = props;
     const {board, boardGrid, boardEdge, pieceRadius} = boardSize
 
     return (
         <Stage width={board} height={board}>
             <Layer ref={ref}>
-                <Board boardSize={boardSize} gameInfo={gameInfo} onGridSelect={onGridSelect} freeCount={freeCount}/>
+                <Board boardSize={boardSize} gameInfo={gameInfo} onGridSelect={onGridSelect} freeCount={freeCount} showPrediction={showPrediction}/>
                 <Group x={boardEdge} y={boardEdge}>
                     {pieces.map(piece => {
                         return <Piece key={piece.num}

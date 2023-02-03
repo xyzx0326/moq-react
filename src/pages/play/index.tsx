@@ -3,18 +3,21 @@ import white from '@/assets/white.png';
 import {Footer, Game, Header, Nav} from '@/components'
 import {boardSize} from "@/config/board";
 import modes from '@/config/modes'
-import rules from "@/config/rules";
+import rules, {defaultRule} from "@/config/rules";
 import {useGo, usePieces, useRemoteGo, useStore} from "@/hooks";
 import {
+    blackJson,
     changeSelfColor,
     GameFrameData,
     GridData,
     handleSelectGrid,
     restart,
     updateRule,
-    updateSelfColor
+    updateSelfColor,
+    whiteJson
 } from "@/stores/game";
-import {addRoom, configRoom, leaveRoom, resetRoom} from '@illuxiza/one-client';
+import {CACHE_RULE_KEY, CacheUtils} from "@/utils";
+import {addRoom, configClient, configRoom, leaveRoom, resetRoom} from '@illuxiza/one-client';
 import {redo, undo, useOnline} from "@illuxiza/one-client-react";
 import axios from "axios";
 import React, {useState} from 'react';
@@ -51,12 +54,24 @@ const Play = () => {
             go(changeSelfColor())
         }
         if (mode === 'remote') {
+            configClient("ws://" + import.meta.env.moq_domain + "/game/ws", {
+                maxPlayer: 2,
+                baseConfig: [JSON.stringify(updateRule(CacheUtils.getItem(CACHE_RULE_KEY, defaultRule)))],
+                debug: false,
+                playerConfig: [[blackJson], [whiteJson]],
+                onConfig: go,
+                onFrame: go,
+                onReset: go
+            }, "moq")
             const roomParam = params.roomId!;
             addRoom(roomParam)
         }
+        if (mode !== "remote") {
+            setShowRule(true);
+        }
         if (mode === "ai") {
             go(updateRule("0.4"));
-            setShowRule(true);
+            setPause(true);
         }
     })
 
@@ -123,7 +138,7 @@ const Play = () => {
 
     let changeColor = () => {
         if (mode === "remote" && online.isPlayer) {
-            const index = online?.myIndex;
+            const index = online.myIndex;
             const s0 = JSON.stringify(updateSelfColor(game.selfIsWhite));
             const s1 = JSON.stringify(updateSelfColor(!game.selfIsWhite));
             const playerConfig = [[s0], [s1]];
@@ -147,7 +162,7 @@ const Play = () => {
         }
     }
     const pauseGame = () => {
-        if (mode === "remote" && !online.isPlayer) {
+        if (mode !== "ai") {
             return;
         }
         setPause(!pause);
@@ -164,10 +179,16 @@ const Play = () => {
         }
         remoteGo(redo(opStep));
     }
+    const disabled = (game.gameIsEnd || (mode == "remote" && !online.isPlayer)) && mode !== 'ai';
     return (
         <div className="main" style={{width: `${boardSize.board}px`}}>
             <Nav title={cfg.title} onBack={onBack}
-                 onSetting={() => setShowRule(true)}
+                 onSetting={() => {
+                     setShowRule(true)
+                     if (mode == "ai") {
+                         setPause(true);
+                     }
+                 }}
             />
             <Header mode={mode} selfIsWhite={game.selfIsWhite} otherSideOnline={online.playerCount === 2}
                     channelId={params.roomId ? params.roomId!.substring(0, 4) : ''} isViewer={!online.isPlayer}
@@ -176,17 +197,18 @@ const Play = () => {
                 <div className="board-header">
                     <div className="header-button">
                         <button style={{marginRight: '10px'}} onClick={restartGame}
-                                disabled={!game.gameIsEnd || (mode == "remote" && !online.isPlayer)}>重开
+                                disabled={(!game.gameIsEnd || (mode == "remote" && !online.isPlayer)) && mode !== 'ai'}>重开
                         </button>
-                        <button style={{marginRight: '10px'}} onClick={() => setPause(!pause)}>{pause ? '开始' : '暂停'}
-                        </button>
+                        {mode === "ai" ?
+                            <button style={{marginRight: '10px'}} onClick={() => pauseGame()}>{pause ? '开始' : '暂停'}
+                            </button> : null}
                     </div>
                     {!game.gameIsEnd ?
                         <div className="color-piece">
                             <img alt="" className="piece-img"
                                  src={game.stepIsWhite ? white : black}
                             />
-                            <span>轮到{mode === 'local' ? game.stepIsWhite ? '白' : '黑' :
+                            <span>轮到{mode !== 'remote' || !online.isPlayer ? game.stepIsWhite ? '白' : '黑' :
                                 sameColor ? '己' : '对'}方走棋</span>
                         </div> : <></>}
                 </div>
@@ -198,6 +220,7 @@ const Play = () => {
                         pieces={pieces}
                         onGridSelect={handleGrid}
                         freeCount={rules[game.rule].freeCount}
+                        showPrediction={mode === 'ai'}
                     />
                 </div>
             </div>
@@ -210,10 +233,10 @@ const Play = () => {
                         </button> :
                     <>
                         <button onClick={undoGame}
-                                disabled={game.gameIsEnd || (mode == "remote" && !online.isPlayer)}>悔棋
+                                disabled={disabled}>悔棋
                         </button>
                         <button onClick={redoGame}
-                                disabled={game.gameIsEnd || (mode == "remote" && !online.isPlayer)}>重走
+                                disabled={disabled}>重走
                         </button>
                         <button onClick={() => setOpen(true)}>
                             记录
@@ -226,7 +249,12 @@ const Play = () => {
             </div>
             <StepRecord open={open} mode={mode} onClose={() => setOpen(false)}/>
             <RuleSetting open={showRule} mode={mode} level={level} setLevel={setLevel}
-                         onClose={() => setShowRule(false)}/>
+                         onClose={() => {
+                             setShowRule(false)
+                             if (mode == 'ai') {
+                                 setPause(false)
+                             }
+                         }}/>
         </div>
     );
 }
