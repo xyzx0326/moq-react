@@ -1,7 +1,7 @@
 import {boardSize} from "@/config/board";
 import rules, {RuleKey} from "@/config/rules";
-import {useGo, useStore} from "@/hooks";
-import {updateRule, updateSelfColor} from "@/stores/game";
+import {useGo, useRemoteGo, useStore} from "@/hooks";
+import {updateAssist, updateRule, updateSelfColor} from "@/stores/game";
 import {configRoom, resetRoom} from "@illuxiza/one-client";
 import {Modal} from "@illuxiza/one-client-react";
 
@@ -19,6 +19,7 @@ type SettingProps = {
 
 const RuleSetting: React.FC<SettingProps> = ({open, mode, level, setLevel, onClose}) => {
     const go = useGo();
+    const remoteGo = useRemoteGo(mode);
     const game = useStore(state => state.game);
     const ruleList = (Object.keys(rules) as RuleKey[]).map((ruleKey) => {
         const rule = rules[ruleKey];
@@ -51,6 +52,11 @@ const RuleSetting: React.FC<SettingProps> = ({open, mode, level, setLevel, onClo
         }
     }
 
+    const toggleAssistItem = (key: boolean) => {
+        const rule = updateAssist(key);
+        remoteGo(rule);
+    }
+
     return <Modal
         open={open}
         width={boardSize.board * 0.8 + 40}
@@ -59,12 +65,39 @@ const RuleSetting: React.FC<SettingProps> = ({open, mode, level, setLevel, onClo
         }}
     >
         <div className="rule-setting">
+            <div className="board-setting">
+                <div className="board-item">辅助落子</div>
+                <div className="board-item">
+                    <div className="board-item-check">
+                        <input
+                            type="radio"
+                            checked={game.assist}
+                            onChange={() => toggleAssistItem(true)
+                            }
+                        />
+                    </div>
+                    <div className="board-item-info">
+                        <div className="board-item-title">开</div>
+                    </div>
+                </div>
+                <div className="board-item">
+                    <div className="board-item-check">
+                        <input
+                            type="radio"
+                            checked={!game.assist}
+                            onChange={() => toggleAssistItem(false)
+                            }
+                        />
+                    </div>
+                    <div className="board-item-info">
+                        <div className="board-item-title">关</div>
+                    </div>
+                </div>
+            </div>
             {mode == "ai" ?
                 <>
                     <div className="board-setting">
                         <div className="board-item">黑白</div>
-                    </div>
-                    <div className="board-setting">
                         <div className="board-item">
                             <div className="board-item-check">
                                 <input
@@ -103,7 +136,7 @@ const RuleSetting: React.FC<SettingProps> = ({open, mode, level, setLevel, onClo
                                     <input
                                         type="radio"
                                         checked={l.code == level}
-                                        disabled={game.rule == "0.5" && l.code == "high"}
+                                        // disabled={game.rule == "0.5" && l.code == "high"}
                                         onChange={() => setLevel && setLevel(l.code)}
                                     />
                                 </div>

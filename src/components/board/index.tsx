@@ -30,7 +30,7 @@ const Board: React.FC<BoardProps> = ({
     const [rects, setRects] = useState<Konva.RectConfig[]>([]);
     const [predictions, setPredictions] = useState<Konva.RectConfig[]>([]);
     const {
-        selectGrid, gameIsEnd, steps, useGrid, board: boardInfo, stepIsWhite, rule
+        selectGrid, gameIsEnd, steps, useGrid, board: boardInfo, stepIsWhite, rule, assist
     } = gameInfo
     const {board, boardGrid, boardEdge} = boardSize;
 
@@ -133,7 +133,7 @@ const Board: React.FC<BoardProps> = ({
     }, [board, boardGrid, boardEdge])
 
     useEffect(() => {
-        if (selectGrid && steps >= rules[rule].freeCount - 1 && showPrediction) {
+        if (selectGrid && steps >= rules[rule].freeCount - 1 && showPrediction && assist) {
             const ret = [];
             const tmp = [];
             const bp = JSON.parse(JSON.stringify(boardInfo))
@@ -191,14 +191,14 @@ const Board: React.FC<BoardProps> = ({
         } else {
             setPredictions([]);
         }
-    }, [selectGrid])
+    }, [selectGrid, assist])
 
     //隐形操作区
     useEffect(() => {
         const ret = [];
         const tmp = [];
         if (!gameIsEnd) {
-            if (!freeCount || steps < freeCount || !useGrid) {
+            if (!freeCount || steps < freeCount || !assist) {
                 for (let i = 0; i < 19; i++) {
                     for (let j = 0; j < 19; j++) {
                         ret.push({
@@ -212,6 +212,7 @@ const Board: React.FC<BoardProps> = ({
                     }
                 }
             } else {
+                const useGrid = rules[gameInfo.rule].useGrid(gameInfo.board, gameInfo.stepIsWhite!);
                 for (let i = 0; i < useGrid!.length; i++) {
                     const use = useGrid![i];
 
@@ -263,7 +264,7 @@ const Board: React.FC<BoardProps> = ({
             }
         }
         setRects(ret)
-    }, [boardGrid, steps, useGrid, gameIsEnd])
+    }, [boardGrid, steps, useGrid, gameIsEnd, assist])
 
     const onClick = (data: GridData) => {
         onGridSelect && onGridSelect(data)

@@ -20,7 +20,8 @@ export type GameFrameData = {
     gameIsEnd?: boolean;// 游戏是否结束
     selectGrid: GridData | undefined,
     useGrid: DirectionData[],
-    rule: RuleKey
+    rule: RuleKey,
+    assist: boolean,
 };
 
 const cacheRule = CacheUtils.getItem(CACHE_RULE_KEY, defaultRule);
@@ -37,6 +38,7 @@ const initialState = {
     otherSideOnline: false,
     selectGrid: undefined,
     rule: cacheRule, //规则
+    assist: true,
 } as GameFrameData
 
 
@@ -81,16 +83,10 @@ export const gameSlice = createSlice({
                     state.steps++;
                     state.board[index] = state.stepIsWhite ? state.steps : -state.steps;
                     const isEnd = GameUtils.checkGameOver(state.board, index, state.rule);
-                    // const isEnd = false;
-                    // console.log(isEnd)
                     if (isEnd) {
                         state.gameIsEnd = true;
-                    } else {
-                        state.stepIsWhite = !state.stepIsWhite;
-                        const useGrid = rules[state.rule].useGrid(state.board, state.stepIsWhite!);
-                        state.useGrid = useGrid;
-                        // console.log(useGrid)
                     }
+                    state.stepIsWhite = !state.stepIsWhite;
                     state.selectGrid = undefined;
                 } else {
                     state.selectGrid = payload;
@@ -113,6 +109,10 @@ export const gameSlice = createSlice({
             state.useGrid = [];
         },
 
+        updateAssist(state, {payload}) {
+            state.assist = payload
+        }
+
     },
 })
 
@@ -122,6 +122,7 @@ export const {
     handleSelectGrid,
     updateRule,
     updateSelfColor,
+    updateAssist
 } = gameSlice.actions
 
 export default gameSlice.reducer
