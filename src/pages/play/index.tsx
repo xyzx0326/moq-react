@@ -43,6 +43,7 @@ const Play = () => {
     const [open, setOpen] = useState(false);
     const [showRule, setShowRule] = useState(false);
     const [level, setLevel] = useState("test");
+    const [loading, setLoading] = useState(false);
 
 
     const sameColor = game.selfIsWhite === game.stepIsWhite;
@@ -57,7 +58,7 @@ const Play = () => {
             configClient("ws://" + import.meta.env.moq_domain + "/game/ws", {
                 maxPlayer: 2,
                 baseConfig: [JSON.stringify(updateRule(CacheUtils.getItem(CACHE_RULE_KEY, defaultRule)))],
-                debug: false,
+                debug: true,
                 playerConfig: [[blackJson], [whiteJson]],
                 onConfig: go,
                 onFrame: go,
@@ -76,7 +77,8 @@ const Play = () => {
     })
 
     useUpdateEffect(() => {
-        if (!pause && mode === 'ai' && !sameColor && !game.gameIsEnd) {
+        if (!pause && mode === 'ai' && !sameColor && !game.gameIsEnd && !loading) {
+            setLoading(true)
             let b: number[][] = [];
             for (let y = 0; y < 19; y++) {
                 b[y] = [];
@@ -102,10 +104,41 @@ const Play = () => {
                     colIndex: res.data.x,
                     ai: true,
                 }
-                setTimeout(() => go(handleSelectGrid(data)), 500);
+                go(handleSelectGrid(data));
+                setLoading(false)
             })
         }
     })
+
+    const aiGo = () => {
+        let b: number[][] = [];
+        for (let y = 0; y < 19; y++) {
+            b[y] = [];
+            for (let x = 0; x < 19; x++) {
+                if (game.board[x + y * 19] < 0) {
+                    b[y][x] = 1;
+                } else if (game.board[x + y * 19] > 0) {
+                    b[y][x] = 2;
+                } else {
+                    b[y][x] = 0;
+                }
+            }
+        }
+        let player = game.selfIsWhite ? 2 : 1;
+        axios.post("/moq/ai2", {
+            board: b,
+            player,
+            level,
+            version: game.rule
+        }).then((res) => {
+            let data: GridData = {
+                rowIndex: res.data.y,
+                colIndex: res.data.x,
+                ai: true,
+            }
+            go(handleSelectGrid(data));
+        })
+    }
 
     const opStep = mode === 'local' || !sameColor || pause ? 1 : 2;
 
@@ -132,7 +165,7 @@ const Play = () => {
     }
     let endBecause = '';
     if (game.gameIsEnd) {
-        endBecause = `${game.stepIsWhite ? '白' : '黑'}方胜利`;
+        endBecause = `${game.stepIsWhite ? '黑' : '白'}方胜利`;
     }
 
 
@@ -197,10 +230,11 @@ const Play = () => {
                 <div className="board-header">
                     <div className="header-button">
                         <button style={{marginRight: '10px'}} onClick={restartGame}
-                                disabled={(!game.gameIsEnd || (mode == "remote" && !online.isPlayer)) && mode !== 'ai'}>重开
+                                disabled={(!game.gameIsEnd || (mode == "remote" && !online.isPlayer)) && mode !== 'ai' || loading}>重开
                         </button>
                         {mode === "ai" ?
-                            <button style={{marginRight: '10px'}} onClick={() => pauseGame()}>{pause ? '开始' : '暂停'}
+                            <button style={{marginRight: '10px'}} onClick={() => pauseGame()}
+                                    disabled={loading}>{pause ? '开始' : '暂停'}
                             </button> : null}
                     </div>
                     {!game.gameIsEnd ?
@@ -226,17 +260,20 @@ const Play = () => {
             </div>
             <Footer mode={mode} selfIsWhite={game.selfIsWhite} isViewer={!online.isPlayer}
                     displayName={online.playerId}>
+                {mode === "ai" ?
+                    <button onClick={aiGo} disabled={!sameColor || loading || game.gameIsEnd}>自动
+                    </button> : null}
                 {game.steps === 0 ?
                     mode === "local" ? <></> :
-                        <button onClick={changeColor}>
+                        <button onClick={changeColor} disabled={loading}>
                             换手
                         </button> :
                     <>
                         <button onClick={undoGame}
-                                disabled={disabled}>悔棋
+                                disabled={disabled || loading}>悔棋
                         </button>
                         <button onClick={redoGame}
-                                disabled={disabled}>重走
+                                disabled={disabled || loading}>重走
                         </button>
                         <button onClick={() => setOpen(true)}>
                             记录

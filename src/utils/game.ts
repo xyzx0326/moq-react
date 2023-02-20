@@ -1,30 +1,6 @@
 import {Rule, RuleKey, rules} from "@/config/rules";
 
-export interface Step {
-    num: number;
-    rowIndex: number;
-    colIndex: number;
-}
-
-export interface AiNextStep extends Step {
-    score: number;
-}
-
 export class GameUtils {
-    /**
-     * 机器人走棋
-     * @param board 棋盘
-     * @param stepIsWhite 步骤是否是白棋
-     * @param selfIsWhite 自己是否是白棋
-     * @returns
-     */
-    static aiNextStep(
-        board: number[],
-        stepIsWhite: boolean,
-        selfIsWhite: boolean,
-        rule: Rule,
-    ) {
-    }
 
     /**
      * 检查局面是否结束，即反方没有可移动的棋子

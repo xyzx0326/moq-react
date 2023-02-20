@@ -1,17 +1,12 @@
-import {defaultRule} from "@/config/rules";
 import {Home, Play} from '@/pages';
 import {store} from "@/stores";
-import {blackJson, updateRule, whiteJson} from "@/stores/game";
-import {CACHE_RULE_KEY, CacheUtils} from "@/utils";
 
-import {configClient} from '@illuxiza/one-client'
+import '@illuxiza/one-client-react/index.scss';
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {Provider} from "react-redux";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-
-import '@illuxiza/one-client-react/index.scss';
 
 
 const root = ReactDOM.createRoot(

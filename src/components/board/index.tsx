@@ -198,7 +198,7 @@ const Board: React.FC<BoardProps> = ({
         const ret = [];
         const tmp = [];
         if (!gameIsEnd) {
-            if (!freeCount || steps < freeCount || !assist) {
+            if (!freeCount || steps < freeCount) {
                 for (let i = 0; i < 19; i++) {
                     for (let j = 0; j < 19; j++) {
                         ret.push({
@@ -253,7 +253,7 @@ const Board: React.FC<BoardProps> = ({
                                     y: boardGrid * r,
                                     width: boardGrid,
                                     height: boardGrid,
-                                    fill: stepIsWhite ? "green" : "red",
+                                    fill: assist ? stepIsWhite ? "green" : "red" : undefined,
                                     // fill: "green"
                                 });
                             }
